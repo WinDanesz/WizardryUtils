@@ -4,8 +4,9 @@ A library mod for addon devs for the Electroblob's Wizardry Minecraft mod.
 
 **This mod requires the [Electroblob's Wizardry mod](https://www.curseforge.com/minecraft/mc-mods/electroblobs-wizardry) .**
 
+WizardryUtils contains shared functionality and code for my addons for Electroblob's Wizardry.
+
 **Features**
-WizardryUtils contains shared functionality and code for my addons, including:
 - Framework for new artefact types (Head slot Bauble, belt slot Bauble)
 - Capability-based handler for registering "dynamic" minion spells. This means minion spells no longer have to register a duplicate variant of the entity which
   implements various interfaces and methods to e.g., remove loot, drops.
