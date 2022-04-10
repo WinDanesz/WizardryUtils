@@ -34,7 +34,7 @@ public class WizardryUtils {
 
 	// Location of the proxy code, used by Forge.
 	@SidedProxy(clientSide = "com.windanesz.wizardryutils.client.ClientProxy", serverSide = "com.windanesz.wizardryutils.CommonProxy")
-	public static CommonProxy proxy;
+	public static CommonProxy proxy; 
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
