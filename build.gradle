@@ -1,4 +1,5 @@
 import org.apache.tools.ant.filters.ReplaceTokens
+import groovy.json.*
 
 buildscript {
     repositories {
@@ -30,12 +31,11 @@ apply plugin: 'maven-publish'
 apply plugin: org.ajoberstar.grgit.gradle.GrgitPlugin
 apply plugin: 'wtf.gofancy.fancygradle'
 
-
 //// Project Settings ////
 // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 
 group = "${project.maven_group}" // groupId
-archivesBaseName = "${project.mod_id}" // artifactId - modid
+archivesBaseName = "${project.jar_name}" // artifactId - modid
 version = "${project.mc_version}-${project.mod_version}"
 
 //// Project Settings ////
@@ -125,7 +125,6 @@ dependencies {
     // Test link: https://www.cursemaven.com/test/<projectid>/<fileid>/<Classifier?>
 
     //// Dependencies ////
-
     implementation fg.deobf("curse.maven:ElectroblobsWizardry-${wizardry_projectid}:${wizardry_fileid}")
     implementation fg.deobf("curse.maven:baubles-${baubles_projectid}:${baubles_fileid}")
 
@@ -171,25 +170,6 @@ task sourceJar(type: Jar, dependsOn: classes) {
     }
 }
 
-processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", version.toString()
-    inputs.property "mcversion", project.mc_version.toString()
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-
-        // replace version and mcversion
-        expand 'version': version.toString(), 'mcversion': project.mc_version.toString()
-    }
-
-    // copy everything else except the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
-}
-
 //// Project manifest data ////
 
 // Example configuration to allow publishing using the maven-publish task
@@ -208,9 +188,6 @@ task downloadSources {
 
         def baubles = new File("libs/BaublesSrc-${baubles_version}.zip")
         new URL("https://github.com/WinDanesz/Baubles/archive/${baubles_version}.zip").withInputStream{ i -> baubles.withOutputStream{ it << i }}
-
-        def artemislib = new File("libs/ArtemisLib-${artemislib_version}.zip")
-        new URL("https://github.com/WinDanesz/ArtemisLib/archive/${artemislib_version}.zip").withInputStream{ i -> artemislib.withOutputStream{ it << i }}
     }
 }
 
@@ -299,9 +276,37 @@ if (System.getenv('USE_ALPHAS').equals('true')) {
     version = "${project.mc_version}-${project.mod_version}"
 }
 
-// replace @TOKENS@ in main file
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", version.toString()
+    inputs.property "mcversion", project.mc_version.toString()
+
+    // Get the CREDITS.md and put it into the mcmod.info credits as json
+    File file = new File("$projectDir/CREDITS.md")
+    String fileContent = file.getText("UTF-8")
+    def credits = JsonOutput.toJson(fileContent).replaceAll('\\\\r', "")
+    // remove opening and closing double quotes
+    credits = credits.getAt(1..credits.length() - 2)
+
+    // replace tokens in mcmod.info, and pack.mcmeta
+    from(sourceSets.main.resources.srcDirs) {
+        include 'pack.mcmeta'
+        include 'mcmod.info'
+        // replace tokens in mcmod.info
+        expand 'version': version.toString(),
+                'mcversion': project.mc_version.toString(),
+                'modid': project.mod_id,
+                'name': project.name,
+                'description': project.description,
+                'url': project.url,
+                "credits" : credits
+    }
+
+    duplicatesStrategy = 'include'
+}
+
 task replaceTokens(type: Sync) {
-    println 'replaceTokens'
+    // replace @TOKENS@ in main file
     from sourceSets.main.java
     inputs.property 'version', project.mc_version.toString()
     filter(ReplaceTokens, tokens: [VERSION: version.toString()])

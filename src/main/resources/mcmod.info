@@ -1,13 +1,11 @@
 [{
-    "modid": "wizadryutils",
-    "name": "WizardryUtils by Dan",
-    "description": "WizardryUtils is a library mod to ease addon (spell pack) development for the Electroblob's Wizardry mod.",
+    "modid": "${modid}",
+    "name": "${name}",
+    "description": "${description}",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "https://www.curseforge.com/minecraft/mc-mods/wizardryutils",
+    "url": "${url}",
     "authorList": ["WinDanesz"],
-    "credits": "
-    Created by WinDanesz
-    Electroblob, for making his awesome Wizardry mod",
-    "logoFile":"assets/wizardryutils/textures/gui/logo.png"
+    "credits": "${credits}",
+    "logoFile":"assets/${modid}/textures/gui/logo.png"
 }]
