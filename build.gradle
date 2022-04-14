@@ -227,9 +227,6 @@ if (System.getenv('USE_ALPHAS').equals('true')) {
                     commandLine "echo", "##[set-output name=project_id;]${project.curse_project_id}";
                 }
                 exec {
-                    commandLine "echo", "##[set-output name=curse_title;]${project.curse_title}";
-                }
-                exec {
                     commandLine "echo", "##[set-output name=curse_versions;]${project.curse_versions}";
                 }
                 if(project.hasProperty('curse_relations')) {
@@ -255,9 +252,6 @@ if (System.getenv('USE_ALPHAS').equals('true')) {
             if(project.hasProperty('curse_project_id')) {
                 exec {
                     commandLine "echo", "##[set-output name=project_id;]${project.curse_project_id}";
-                }
-                exec {
-                    commandLine "echo", "##[set-output name=curse_title;]${project.curse_title}";
                 }
                 exec {
                     commandLine "echo", "##[set-output name=curse_versions;]${project.curse_versions}";
