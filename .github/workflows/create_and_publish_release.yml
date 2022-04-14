@@ -1,4 +1,4 @@
-name: 'Create Release And Publish Release'
+name: 'Create And Publish Release'
 
 on:
   push:
@@ -8,22 +8,30 @@ on:
 jobs:
 
   build:
+    name: Run Build
     runs-on: ubuntu-latest
     steps:
-      - {uses: actions/checkout@v1}
-      - {name: 'Set up JDK 1.8', uses: actions/setup-java@v1, with: {java-version: 1.8}}
-      - {name: 'Setup Build', run: 'chmod 777 gradlew'}
-      - {name: 'Build with Gradle', id: build, env: {USE_ALPHAS: false}, run: './gradlew setupGithubActions build --max-workers=1'}
+      - name: 'Checkout'
+        uses: actions/checkout@v1
 
-  2_generate_changelog:
-    runs-on: ubuntu-latest
+      - name: 'Set up JDK 1.8'
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: 'Setup Build'
+        run: 'chmod 777 gradlew'
+
+      - name: 'Build with Gradle'
+        id: build
+        env: {USE_ALPHAS: false}
+        run: './gradlew setupGithubActions build --max-workers=1'
+
+  generate_changelog:
     name: Create and Commit Changelog
-
+    needs: build
+    runs-on: ubuntu-latest
     steps:
-        name: Checkout
-        needs: build
-        uses: actions/checkout@v2
-
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
@@ -53,17 +61,15 @@ jobs:
           template-path: "/.github/workflows/CURSEFORGE_CHANGELOG.tpl.md"
           current-tag: ${{ steps.get_version.outputs.VERSION }}
 
-      - name: Commit CURSEFORGE_CHANGELOG.md
+      - name: Commit Changelogs
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           branch: 1.12.2
           commit_message: 'docs: update changelogs for ${{ github.ref_name }}'
 
-  3_publish_to_curseforge:
+  publish_to_curseforge:
     runs-on: ubuntu-latest
-    needs: 2_generate_changelog
-  build:
-    runs-on: ubuntu-latest
+    needs: generate_changelog
     steps:
       - name: "Upload to CurseForge"
         uses: itsmeow/curseforge-upload@master
