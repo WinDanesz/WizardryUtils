@@ -15,4 +15,8 @@ WizardryUtils contains shared functionality and code for my addons for Electrobl
 
 **Planned features**
 - Automated spell wiki page generator
+- Automated item wiki page generator (+Artefact item page generator)
 - Shared code for conjured item spells - this will allow easily creating new spells that summons temporary variants of modded (and vanilla) items
+
+**Other Plans**
+- Create a test spell pack project to allow people easily get started with spell pack (and mod) development
