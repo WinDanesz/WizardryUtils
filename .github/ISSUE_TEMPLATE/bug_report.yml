@@ -1,19 +1,19 @@
 name: 🐛 Bug Report
 description: Something is not working as expected
 title: "[Bug] <write the title here>"
-labels: ["bug", "Needs Triage"]
+labels: [ "bug", "Needs Triage" ]
 body:
   - type: markdown
     attributes:
       value: |
-        Please try the latest version of Ancient Spellcraft and check if the issue persist before submitting a report
+        Please try the latest version of the mod and check if the issue persist before submitting a report
   - type: checkboxes
     attributes:
       label: Is there an existing issue for this?
       description: Please search to see if an issue already exists for the bug you encountered.
       options:
-      - label: I have searched the existing issues
-        required: true
+        - label: I have searched the existing issues
+          required: true
   - type: textarea
     id: observed
     attributes:
@@ -45,6 +45,17 @@ body:
       label: Crashlog
       description: If this was a crash, grab [minecraft instance]/logs/debug.log, upload it as a [gist](https://gist.github.com/) and paste the link here
       placeholder: https://gist.github.com/<your-user>/abcdef124
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment (Singleplayer/Server, etc.)
+      options:
+        - Singleplayer
+        - LAN game/Server
+        - Issue present on both sides
+        - Not sure
+    validations:
+      required: true
   - type: input
     id: mod-version
     attributes:
