@@ -23,5 +23,6 @@ libraries
 # other
 eclipse
 run
-/classes/*
-libs/
+/mcmodsrepo/
+/classes/
+/libs/
