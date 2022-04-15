@@ -220,11 +220,11 @@ if (System.getenv('USE_ALPHAS').equals('true')) {
         }
         doLast {
             exec {
-                commandLine "echo", "##[set-output name=modid;]${project.mod_id}";
+                commandLine "echo", "##[set-output name=jar_name;]${project.jar_name}";
             }
             if(project.hasProperty('curse_project_id')) {
                 exec {
-                    commandLine "echo", "##[set-output name=project_id;]${project.curse_project_id}";
+                    commandLine "echo", "##[set-output name=curse_project_id;]${project.curse_project_id}";
                 }
                 exec {
                     commandLine "echo", "##[set-output name=curse_versions;]${project.curse_versions}";
@@ -247,11 +247,11 @@ if (System.getenv('USE_ALPHAS').equals('true')) {
     task setupGithubActions() {
         doLast {
             exec {
-                commandLine "echo", "##[set-output name=modid;]${project.mod_id}";
+                commandLine "echo", "##[set-output name=jar_name;]${project.jar_name}";
             }
             if(project.hasProperty('curse_project_id')) {
                 exec {
-                    commandLine "echo", "##[set-output name=project_id;]${project.curse_project_id}";
+                    commandLine "echo", "##[set-output name=curse_project_id;]${project.curse_project_id}";
                 }
                 exec {
                     commandLine "echo", "##[set-output name=curse_versions;]${project.curse_versions}";
