@@ -58,7 +58,7 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           commit-types: "fix:Bug Fixes,feat:Features,refactor:Refactoring"
-          template-path: "./.github/workflows/CURSEFORGE_CHANGELOG.tpl.md"
+          template-path: ".github/workflows/CURSEFORGE_CHANGELOG.tpl.md"
           current-tag: ${{ steps.get_version.outputs.VERSION }}
 
       - name: Commit Changelogs
