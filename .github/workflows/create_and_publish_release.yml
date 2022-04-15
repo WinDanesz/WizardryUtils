@@ -7,12 +7,17 @@ on:
 
 jobs:
 
+  generate_changelog:
+    name: Build > Create and Commit Changelog > Publish
+    #needs: build
+    runs-on: ubuntu-latest
+    steps:
   # build:
+      - name: 'Checkout'
+        uses: actions/checkout@v1
   #   name: Run Build
   #   runs-on: ubuntu-latest
   #   steps:
-  #     - name: 'Checkout'
-  #       uses: actions/checkout@v1
 
   #     - name: 'Set up JDK 1.8'
   #       uses: actions/setup-java@v1
@@ -27,11 +32,6 @@ jobs:
   #       env: {USE_ALPHAS: false}
   #       run: './gradlew setupGithubActions build --max-workers=1'
 
-  generate_changelog:
-    name: Create and Commit Changelog
-    #needs: build
-    runs-on: ubuntu-latest
-    steps:
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
@@ -67,17 +67,17 @@ jobs:
           branch: 1.12.2
           commit_message: 'docs: update changelogs for ${{ github.ref_name }}'
 
-  publish_to_curseforge:
-    name: Publish to CurseForge
-    needs: generate_changelog
-    runs-on: ubuntu-latest
-    steps:
+      # publish_to_curseforge:
+      # name: Publish to CurseForge
+      # needs: generate_changelog
+      # runs-on: ubuntu-latest
+      # steps:
       - name: "Upload to CurseForge"
         uses: itsmeow/curseforge-upload@master
         with:
           changelog: "Changelog not added yet..."
           changelog_type: html
-        # display_name: use the filename
+          # display_name: use the filename
           file_path: "/build/libs/${{ steps.build.outputs.modid }}-${{ steps.build.outputs.version }}.jar"
           game_endpoint: minecraft
           relations: "${{ steps.build.outputs.curse_relations }}"
