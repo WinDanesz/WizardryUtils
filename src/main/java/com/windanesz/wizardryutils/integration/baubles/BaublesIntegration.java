@@ -20,6 +20,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,8 +34,8 @@ public final class BaublesIntegration {
 
 	public static final String BAUBLES_MOD_ID = "baubles";
 
-	private static final Map<ItemArtefact.Type, BaubleType> WIZARDRY_ARTEFACT_TYPE_MAP = new EnumMap<>(ItemArtefact.Type.class);
-	private static final Map<ItemNewArtefact.AdditionalType, BaubleType> ARTEFACT_TYPE_MAP = new EnumMap<>(ItemNewArtefact.AdditionalType.class);
+	private static final Map<ItemArtefact.Type, BaubleType> DEFAULT_ARTEFACT_TYPE_MAP = new EnumMap<>(ItemArtefact.Type.class);
+	private static final Map<ItemNewArtefact.Type, BaubleType> OTHER_ARTEFACT_TYPE_MAP = new EnumMap<>(ItemNewArtefact.Type.class);
 
 	private static boolean baublesLoaded;
 
@@ -44,13 +45,13 @@ public final class BaublesIntegration {
 
 		if (!enabled()) { return; }
 
-		WIZARDRY_ARTEFACT_TYPE_MAP.put(ItemArtefact.Type.RING, BaubleType.RING);
-		WIZARDRY_ARTEFACT_TYPE_MAP.put(ItemArtefact.Type.AMULET, BaubleType.AMULET);
-		WIZARDRY_ARTEFACT_TYPE_MAP.put(ItemArtefact.Type.CHARM, BaubleType.CHARM);
+		DEFAULT_ARTEFACT_TYPE_MAP.put(ItemArtefact.Type.RING, BaubleType.RING);
+		DEFAULT_ARTEFACT_TYPE_MAP.put(ItemArtefact.Type.AMULET, BaubleType.AMULET);
+		DEFAULT_ARTEFACT_TYPE_MAP.put(ItemArtefact.Type.CHARM, BaubleType.CHARM);
 
-		ARTEFACT_TYPE_MAP.put(ItemNewArtefact.AdditionalType.BELT, BaubleType.BELT);
-		ARTEFACT_TYPE_MAP.put(ItemNewArtefact.AdditionalType.HEAD, BaubleType.HEAD);
-		ARTEFACT_TYPE_MAP.put(ItemNewArtefact.AdditionalType.BODY, BaubleType.HEAD);
+		OTHER_ARTEFACT_TYPE_MAP.put(ItemNewArtefact.Type.BELT, BaubleType.BELT);
+		OTHER_ARTEFACT_TYPE_MAP.put(ItemNewArtefact.Type.HEAD, BaubleType.HEAD);
+		OTHER_ARTEFACT_TYPE_MAP.put(ItemNewArtefact.Type.BODY, BaubleType.HEAD);
 	}
 
 	public static boolean enabled() {
@@ -69,12 +70,12 @@ public final class BaublesIntegration {
 	 * @return A list of equipped artefact {@code ItemStacks}.
 	 */
 	// This could return all ItemStacks, but if an artefact type is given this doesn't really make sense.
-	public static List<ItemNewArtefact> getEquippedArtefacts(EntityPlayer player, ItemNewArtefact.AdditionalType... types) {
+	public static List<ItemNewArtefact> getEquippedArtefacts(EntityPlayer player, ItemNewArtefact.Type... types) {
 
 		List<ItemNewArtefact> artefacts = new ArrayList<>();
 
-		for (ItemNewArtefact.AdditionalType type : types) {
-			for (int slot : ARTEFACT_TYPE_MAP.get(type).getValidSlots()) {
+		for (ItemNewArtefact.Type type : types) {
+			for (int slot : OTHER_ARTEFACT_TYPE_MAP.get(type).getValidSlots()) {
 				ItemStack stack = BaublesApi.getBaublesHandler(player).getStackInSlot(slot);
 				if (stack.getItem() instanceof ItemNewArtefact) { artefacts.add((ItemNewArtefact) stack.getItem()); }
 			}
@@ -89,8 +90,8 @@ public final class BaublesIntegration {
 
 		private BaubleType type;
 
-		public ArtefactBaubleProvider(ItemNewArtefact.AdditionalType type) {
-			this.type = ARTEFACT_TYPE_MAP.get(type);
+		public ArtefactBaubleProvider(ItemNewArtefact.Type type) {
+			this.type = OTHER_ARTEFACT_TYPE_MAP.get(type);
 		}
 
 		@Override
@@ -105,14 +106,49 @@ public final class BaublesIntegration {
 		}
 	}
 
-	public static List<ItemStack> getEquippedArtefactStacks(EntityPlayer player, ItemArtefact.Type... types) {
+	/**
+	 * Gets all equipped artefacts for the given player with their slot number.
+	 * @param player the player to check
+	 * @return all artefacts, including both the default and new types and their current bauble slot. Excludes BaubleType.TRINKLET, as that is not used as an artefact anyways.
+	 */
+	public static Map<Integer, ItemStack> getAllEquippedArtefacts(EntityPlayer player) {
+
+		Map<Integer, ItemStack> artefacts = new HashMap<>();
+
+		for (int i = 0; i <= 6; i++) {
+			ItemStack stack = BaublesApi.getBaublesHandler(player).getStackInSlot(i);
+			if (stack.getItem() instanceof ItemArtefact || stack.getItem() instanceof ItemArtefact) {
+				artefacts.put(i, stack);
+			}
+		}
+
+		return artefacts;
+	}
+
+	 /**
+	 * Returns all equipped artefact ItemStack of the given type for the given player. This includes both the new types of {@link ItemNewArtefact} and the other types {@link ItemArtefact}.
+	 * @param player player to check
+	 * @param artefactType this must be an array of {@link ItemArtefact.Type} enums and {@link ItemNewArtefact.Type} enum, the method won't do anything for other objects!
+	 * @return a List of ItemStacks for the given artefact type.
+	 */
+	public static List<ItemStack> getEquippedArtefactStacks(EntityPlayer player, Object... artefactType) {
 
 		List<ItemStack> artefacts = new ArrayList<>();
 
-		for (ItemArtefact.Type type : types) {
-			for (int slot : WIZARDRY_ARTEFACT_TYPE_MAP.get(type).getValidSlots()) {
-				ItemStack stack = BaublesApi.getBaublesHandler(player).getStackInSlot(slot);
-				if (stack.getItem() instanceof ItemArtefact) { artefacts.add(stack); }
+		for (Object type : artefactType) {
+
+			if (type instanceof ItemArtefact.Type) {
+				// check the default types.. (AMULET, RING, CHARM)
+				for (int slot : DEFAULT_ARTEFACT_TYPE_MAP.get((ItemArtefact.Type) type).getValidSlots()) {
+					ItemStack stack = BaublesApi.getBaublesHandler(player).getStackInSlot(slot);
+					if (stack.getItem() instanceof ItemArtefact) { artefacts.add(stack); }
+				}
+			} else if (type instanceof ItemNewArtefact.Type) {
+				// check the other types (HEAD, BELT, BODY)
+				for (int slot : OTHER_ARTEFACT_TYPE_MAP.get((ItemNewArtefact.Type) type).getValidSlots()) {
+					ItemStack stack = BaublesApi.getBaublesHandler(player).getStackInSlot(slot);
+					if (stack.getItem() instanceof ItemNewArtefact) { artefacts.add(stack); }
+				}
 			}
 		}
 
@@ -124,7 +160,7 @@ public final class BaublesIntegration {
 	}
 
 	public static void setArtefactToSlot(EntityPlayer player, ItemStack stack, ItemArtefact.Type type, int slotId) {
-		BaublesApi.getBaublesHandler(player).setStackInSlot(WIZARDRY_ARTEFACT_TYPE_MAP.get(type).getValidSlots()[slotId], stack);
+		BaublesApi.getBaublesHandler(player).setStackInSlot(DEFAULT_ARTEFACT_TYPE_MAP.get(type).getValidSlots()[slotId], stack);
 	}
 
 	public static void tickWornArtefacts(EntityPlayer player) {

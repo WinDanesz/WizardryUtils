@@ -28,18 +28,20 @@ import java.util.stream.Collectors;
  * Author: WinDanesz
  * <p>
  * Most classes are based on {@link electroblob.wizardry.item.ItemArtefact} - Author: Electroblob
+ *
+ * Always pay attention if you are using {@link ItemNewArtefact} or {@link electroblob.wizardry.item.ItemArtefact} as these classes have very similar methods.
  */
 public class ItemNewArtefact extends Item {
 
 	private final EnumRarity rarity;
-	private final AdditionalType type;
+	private final Type type;
 
 	/**
 	 * False if this artefact has been disabled in the config, true otherwise.
 	 */
 	private boolean enabled = true;
 
-	public ItemNewArtefact(EnumRarity rarity, AdditionalType type) {
+	public ItemNewArtefact(EnumRarity rarity, Type type) {
 		super();
 		setMaxStackSize(1);
 		setCreativeTab(WizardryTabs.GEAR);
@@ -47,7 +49,7 @@ public class ItemNewArtefact extends Item {
 		this.type = type;
 	}
 
-	public enum AdditionalType {
+	public enum Type {
 
 		/**
 		 * An artefact that fits into the Baubles BELT slot. One of these can be active at any one time.
@@ -64,7 +66,7 @@ public class ItemNewArtefact extends Item {
 
 		public final int maxAtOnce;
 
-		AdditionalType(int maxAtOnce) {
+		Type(int maxAtOnce) {
 			this.maxAtOnce = maxAtOnce;
 		}
 	}
@@ -93,7 +95,7 @@ public class ItemNewArtefact extends Item {
 		return rarity == EnumRarity.EPIC;
 	}
 
-	public AdditionalType getType() {
+	public Type getType() {
 		return type;
 	}
 
@@ -110,7 +112,7 @@ public class ItemNewArtefact extends Item {
 	 * when it is equipped in an appropriate bauble slot. If Baubles is not loaded, an artefact is active if it is one
 	 * of the first n of its type on the player's hands/hotbar, where n is the number of bauble slots of that type.
 	 * <p></p>
-	 * {@link ItemNewArtefact#getActiveNewArtefacts(EntityPlayer, ItemNewArtefact.AdditionalType...)} cannot be used to query the new types.
+	 * {@link ItemNewArtefact#getActiveArtefacts(EntityPlayer, Type...)} cannot be used to query the new types.
 	 *
 	 * @param player   The player whose inventory is to be checked.
 	 * @param artefact The artefact to check for.
@@ -118,8 +120,8 @@ public class ItemNewArtefact extends Item {
 	 * item is not an instance of {@code ItemNewArtefact}.
 	 * @throws IllegalArgumentException If the given item is not an artefact.
 	 */
-	// It's cleaner to cast to ItemNewArtefact here than wherever it is used - items can't be stored as ItemWhatever objects
-	public static boolean isNewArtefactActive(EntityPlayer player, Item artefact) {
+	// It's cleaner to cast to ItemNewArtefact here than wherever it is used
+	public static boolean isArtefactActive(EntityPlayer player, Item artefact) {
 
 		if (!(artefact instanceof ItemNewArtefact)) { throw new IllegalArgumentException("Not an ItemNewArtefact!"); }
 
@@ -127,6 +129,7 @@ public class ItemNewArtefact extends Item {
 			return false; // Disabled in the config
 		}
 
+		// This handles checks for any bauble slots
 		if (WizardryBaublesIntegration.enabled()) {
 			return WizardryBaublesIntegration.isBaubleEquipped(player, artefact);
 		} else {
@@ -153,9 +156,9 @@ public class ItemNewArtefact extends Item {
 	 * @return True if the player has the artefact and it is active, false if not. Always returns false if the given
 	 * item is not an instance of {@code ItemNewArtefact}.
 	 */
-	public static List<ItemNewArtefact> getActiveNewArtefacts(EntityPlayer player, ItemNewArtefact.AdditionalType... types) {
+	public static List<ItemNewArtefact> getActiveArtefacts(EntityPlayer player, Type... types) {
 
-		if (types.length == 0) { types = ItemNewArtefact.AdditionalType.values(); }
+		if (types.length == 0) { types = Type.values(); }
 
 		if (WizardryBaublesIntegration.enabled() && BaublesIntegration.enabled()) {
 			return BaublesIntegration.getEquippedArtefacts(player, types);
@@ -163,7 +166,7 @@ public class ItemNewArtefact extends Item {
 
 			List<ItemNewArtefact> artefacts = new ArrayList<>();
 
-			for (ItemNewArtefact.AdditionalType type : types) {
+			for (Type type : types) {
 				artefacts.addAll(InventoryUtils.getPrioritisedHotbarAndOffhand(player).stream()
 						.filter(s -> s.getItem() instanceof ItemNewArtefact)
 						.map(s -> (ItemNewArtefact) s.getItem())
