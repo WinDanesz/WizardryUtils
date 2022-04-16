@@ -158,7 +158,7 @@ public final class BaublesIntegration {
 				if (item instanceof ItemArtefact) {
 					enabled = ((ItemArtefact) item).isEnabled();
 				} else if (item instanceof ItemNewArtefact) {
-//					enabled = ((ItemNewArtefact) item).isEnabled(); TODO
+					enabled = ((ItemNewArtefact) item).isEnabled();
 				}
 
 				if (enabled) {

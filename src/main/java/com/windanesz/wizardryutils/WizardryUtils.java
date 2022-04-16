@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Random;
@@ -33,6 +34,9 @@ public class WizardryUtils {
 	@SidedProxy(clientSide = "com.windanesz.wizardryutils.client.ClientProxy", serverSide = "com.windanesz.wizardryutils.CommonProxy")
 	public static CommonProxy proxy;
 
+	/** Static instance of the {@link ArtefactSettings} object for WizardryUtils. */
+	public static final ArtefactSettings artefactSettings = new ArtefactSettings();
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		logger = event.getModLog();
@@ -43,10 +47,14 @@ public class WizardryUtils {
 
 		// Capabilities
 		SummonedCreatureData.register();
+
+		artefactSettings.initConfig(event);
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+
+		artefactSettings.initConfigExtras();
 
 		MinecraftForge.EVENT_BUS.register(instance);
 		proxy.registerParticles();
@@ -58,4 +66,11 @@ public class WizardryUtils {
 
 	@EventHandler
 	public void serverStartup(FMLServerStartingEvent event) { }
+
+	@SubscribeEvent
+	public void onArtefactConfigChanged(net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent event){
+		if(event.getModID().equals(WizardryUtils.MODID)){
+			artefactSettings.saveConfigChanges();
+		}
+	}
 }
