@@ -1,10 +1,7 @@
 package com.windanesz.wizardryutils;
 
-
 import com.windanesz.wizardryutils.capability.SummonedCreatureData;
-import com.windanesz.wizardryutils.integration.Integration;
 import com.windanesz.wizardryutils.integration.baubles.BaublesIntegration;
-import com.windanesz.wizardryutils.network.SBPacketHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -54,15 +51,10 @@ public class WizardryUtils {
 		MinecraftForge.EVENT_BUS.register(instance);
 		proxy.registerParticles();
 		proxy.init();
-		SBPacketHandler.initPackets();
-		//NetworkRegistry.INSTANCE.registerGuiHandler(this, new SBGuiHandler());
-
 	}
 
 	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
-		Integration.setDisables();
-	}
+	public void postInit(FMLPostInitializationEvent event) { }
 
 	@EventHandler
 	public void serverStartup(FMLServerStartingEvent event) { }

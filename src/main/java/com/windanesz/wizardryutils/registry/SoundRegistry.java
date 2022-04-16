@@ -10,8 +10,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @GameRegistry.ObjectHolder(WizardryUtils.MODID)
 @Mod.EventBusSubscriber(modid = WizardryUtils.MODID)
-public class SBSounds {
-	private SBSounds() {}
+public class SoundRegistry {
+	private SoundRegistry() {}
 
 	public static SoundEvent createSound(String name) {
 		return createSound(WizardryUtils.MODID, name);

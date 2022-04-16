@@ -1,7 +1,6 @@
 package com.windanesz.wizardryutils.registry;
 
 import com.windanesz.wizardryutils.WizardryUtils;
-import com.windanesz.wizardryutils.integration.Integration;
 import electroblob.wizardry.registry.WizardryTabs;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -34,9 +33,19 @@ public final class ItemRegistry {
 	 * Registers artefacts into the item registry, also handles loot injection to the Wizardry artefact loot tables.
 	 * Categorization happens based on EnumRarity (Uncommon/Rare/Epic) - the standard Wizardry artefact rarities.
 	 */
-	public static void registerItemArtefact(IForgeRegistry<Item> registry, String name, String modid, Item item, Integration integration) {
+	public static void registerItemArtefact(IForgeRegistry<Item> registry, String name, String modid, Item item) {
+		registerItemArtefact(registry, name, modid, item, true);
+	}
+
+	/**
+	 * Registers artefacts into the item registry, also handles loot injection to the Wizardry artefact loot tables.
+	 * Categorization happens based on EnumRarity (Uncommon/Rare/Epic) - the standard Wizardry artefact rarities.
+	 */
+	public static void registerItemArtefact(IForgeRegistry<Item> registry, String name, String modid, Item item, boolean addToLoot) {
 		registerItem(registry, name, modid, item, false);
-		integration.addArtefact(item);
+		if (addToLoot) {
+			LootRegistry.addArtefact(item);
+		}
 	}
 
 	// below registry methods are courtesy of EB
