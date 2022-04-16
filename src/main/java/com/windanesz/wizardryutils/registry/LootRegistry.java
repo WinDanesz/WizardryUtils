@@ -1,5 +1,6 @@
 package com.windanesz.wizardryutils.registry;
 
+import com.windanesz.wizardryutils.Settings;
 import com.windanesz.wizardryutils.WizardryUtils;
 import electroblob.wizardry.Wizardry;
 import net.minecraft.item.EnumRarity;
@@ -29,7 +30,7 @@ import java.util.regex.Pattern;
  * @author WinDanesz
  */
 @Mod.EventBusSubscriber
-public class LootRegistry{
+public class LootRegistry {
 
 	private static List<Item> artefacts = new ArrayList<>();
 
@@ -43,36 +44,39 @@ public class LootRegistry{
 	public static void onLootTableLoadEvent(LootTableLoadEvent event) {
 		/////////////// Artefact injection ///////////////
 
-		if (event.getName().getNamespace().equals(Wizardry.MODID)) {
+		if (Settings.generalSettings.auto_inject_artefacts_to_shrines) {
 
-			// pattern for any artefact subset table
-			Pattern p = Pattern.compile(".*subsets/(.*)_artefacts");
-			Matcher m = p.matcher(event.getName().getPath());
+			if (event.getName().getNamespace().equals(Wizardry.MODID)) {
 
-			if (m.find()) {
+				// pattern for any artefact subset table
+				Pattern p = Pattern.compile(".*subsets/(.*)_artefacts");
+				Matcher m = p.matcher(event.getName().getPath());
 
-				// default pool name prefix is <tier>_artefacts
-				String poolName = m.group(1) + "_artefacts";
+				if (m.find()) {
 
-				// turning this prefix into an EnumRarity
-				EnumRarity rarity = EnumRarity.valueOf(m.group(1).toUpperCase());
+					// default pool name prefix is <tier>_artefacts
+					String poolName = m.group(1) + "_artefacts";
 
-				// items of this list will be injected into this loot table
-				List<Item> inject = new ArrayList<>();
+					// turning this prefix into an EnumRarity
+					EnumRarity rarity = EnumRarity.valueOf(m.group(1).toUpperCase());
 
-				// check all artefacts in the artefact list, if rarity matches, they'll be added to the inject list
-				for (Item artefact : artefacts) {
-					if (artefact.getForgeRarity(new ItemStack(artefact)) == rarity) {
-						inject.add(artefact);
+					// items of this list will be injected into this loot table
+					List<Item> inject = new ArrayList<>();
+
+					// check all artefacts in the artefact list, if rarity matches, they'll be added to the inject list
+					for (Item artefact : artefacts) {
+						if (artefact.getForgeRarity(new ItemStack(artefact)) == rarity) {
+							inject.add(artefact);
+						}
 					}
-				}
 
-				if (!inject.isEmpty()) {
-					int index = 0;
-					for (Item item : inject) {
-						WizardryUtils.logger.debug("Injecting loot entry item " + item.getRegistryName().toString() + " to " + poolName + " Wizardry loot table.");
-						event.getTable().getPool(poolName).addEntry(new LootEntryItem(item, 1, 0, new LootFunction[0], new LootCondition[0],
-								item.getRegistryName().getPath() + "_" + index));
+					if (!inject.isEmpty()) {
+						int index = 0;
+						for (Item item : inject) {
+							WizardryUtils.logger.debug("Injecting loot entry item " + item.getRegistryName().toString() + " to " + poolName + " Wizardry loot table.");
+							event.getTable().getPool(poolName).addEntry(new LootEntryItem(item, 1, 0, new LootFunction[0], new LootCondition[0],
+									item.getRegistryName().getPath() + "_" + index));
+						}
 					}
 				}
 			}
