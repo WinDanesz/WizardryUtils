@@ -50,7 +50,7 @@ public final class BaublesIntegration {
 
 		ARTEFACT_TYPE_MAP.put(ItemNewArtefact.AdditionalType.BELT, BaubleType.BELT);
 		ARTEFACT_TYPE_MAP.put(ItemNewArtefact.AdditionalType.HEAD, BaubleType.HEAD);
-
+		ARTEFACT_TYPE_MAP.put(ItemNewArtefact.AdditionalType.BODY, BaubleType.HEAD);
 	}
 
 	public static boolean enabled() {

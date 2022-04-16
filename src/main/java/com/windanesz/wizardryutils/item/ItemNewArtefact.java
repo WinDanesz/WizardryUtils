@@ -56,7 +56,11 @@ public class ItemNewArtefact extends Item {
 		/**
 		 * An artefact that fits into the Baubles HEAD slot. One of these can be active at any one time.
 		 */
-		HEAD(1);
+		HEAD(1),
+		/**
+		 * An artefact that fits into the Baubles HEAD slot. One of these can be active at any one time.
+		 */
+		BODY(1);
 
 		public final int maxAtOnce;
 
