@@ -1,8 +1,10 @@
 package com.windanesz.wizardryutils.registry;
 
 import com.windanesz.wizardryutils.WizardryUtils;
+import com.windanesz.wizardryutils.item.ItemNewArtefact;
 import electroblob.wizardry.registry.WizardryTabs;
 import net.minecraft.block.Block;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -10,6 +12,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import javax.annotation.Nonnull;
@@ -22,7 +25,16 @@ public final class ItemRegistry {
 
 	@SubscribeEvent
 	public static void register(RegistryEvent.Register<Item> event) {
+
 		IForgeRegistry<Item> registry = event.getRegistry();
+
+		// Test item, only added in dev env!
+		if (FMLLaunchHandler.isDeobfuscatedEnvironment()) {
+			WizardryUtils.logger.info("Registering debug artefact items...");
+			ItemRegistry.registerItemArtefact(registry, "head_test", WizardryUtils.MODID, new ItemNewArtefact(EnumRarity.UNCOMMON, ItemNewArtefact.Type.HEAD));
+			ItemRegistry.registerItemArtefact(registry, "belt_test", WizardryUtils.MODID, new ItemNewArtefact(EnumRarity.RARE, ItemNewArtefact.Type.BELT));
+			ItemRegistry.registerItemArtefact(registry, "body_test", WizardryUtils.MODID, new ItemNewArtefact(EnumRarity.EPIC, ItemNewArtefact.Type.BODY));
+		}
 	}
 
 	@Nonnull
@@ -42,7 +54,7 @@ public final class ItemRegistry {
 	 * Categorization happens based on EnumRarity (Uncommon/Rare/Epic) - the standard Wizardry artefact rarities.
 	 */
 	public static void registerItemArtefact(IForgeRegistry<Item> registry, String name, String modid, Item item, boolean addToLoot) {
-		registerItem(registry, name, modid, item, false);
+		registerItem(registry, modid, name, item, false);
 		if (addToLoot) {
 			LootRegistry.addArtefact(item);
 		}

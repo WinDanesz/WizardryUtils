@@ -1,2 +1,10 @@
 # Generic
 settings.wizardryutils:general_settings=General Settings
+
+# Test items
+item.wizardryutils:head_test.name=Test Head Slot Artefact
+item.wizardryutils:body_test.name=Test Body Slot Artefact
+item.wizardryutils:belt_test.name=Test Belt Slot Artefact
+item.wizardryutils:head_test.desc=Dev only item that does not appear in-game normally
+item.wizardryutils:body_test.desc=Dev only item that does not appear in-game normally
+item.wizardryutils:belt_test.desc=Dev only item that does not appear in-game normally
