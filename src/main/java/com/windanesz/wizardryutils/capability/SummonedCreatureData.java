@@ -50,16 +50,20 @@ import java.util.UUID;
 @Mod.EventBusSubscriber
 public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 
+	public static final String SUMMONED_TAG = SummonedCreatureData.SUMMONED_TAG;
+
 	/**
 	 * Static instance of what I like to refer to as the capability key. Private because, well, it's internal!
 	 */
 	// This annotation does some crazy Forge magic behind the scenes and assigns this field a value.
 	@CapabilityInject(SummonedCreatureData.class)
 	private static final Capability<SummonedCreatureData> SUMMONED_CREATURE_DATA_CAPABILITY = null;
+
 	/**
 	 * The player this WizardData instance belongs to.
 	 */
 	private final EntityLivingBase minion;
+
 	// Field implementations
 	private int lifetime = -1;
 	private boolean summoned = false;
@@ -104,6 +108,11 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 		return entity.getCapability(SUMMONED_CREATURE_DATA_CAPABILITY, null);
 	}
 
+	/**
+	 * Checks if the given entity is considered as a summon (= has the {@link SummonedCreatureData#SUMMONED_CREATURE_DATA_CAPABILITY}) capability).
+	 * @param entity the entity to check
+	 * @return true if the entity has the capability, false otherwise
+	 */
 	public static boolean isSummonedEntity(Entity entity) {
 		return entity instanceof EntityCreature && get((EntityCreature) entity) != null && get((EntityCreature) entity).summoned;
 	}
@@ -118,6 +127,11 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 		}
 	}
 
+	/**
+	 * Every time this entity enters this world (new entity or loaded from disk), this method checks if the entity is a summon.
+	 * If the entity is a summon, the summon's target tasks are immediately replaced by {@link SummonedCreatureData#updateEntityTargetTasks(net.minecraft.entity.EntityCreature)}
+	 * @param event
+	 */
 	@SubscribeEvent
 	public static void onEntityJoinWorldEvent(EntityJoinWorldEvent event) {
 		if (isSummonedEntity(event.getEntity())) {
@@ -128,6 +142,10 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 		}
 	}
 
+	/**
+	 * Calls the {@link SummonedCreatureData#updateDelegate()} method of the summoned entity each tick.
+	 * @param event LivingUpdateEvent
+	 */
 	@SubscribeEvent
 	public static void onLivingUpdateEvent(LivingUpdateEvent event) {
 		if (isSummonedEntity(event.getEntity())) {
@@ -135,6 +153,10 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 		}
 	}
 
+	/**
+	 * Cancels any item loot drops when this summon dies
+	 * @param event LivingDropsEvent Event is fired when an Entity's death causes dropped items to appear.
+	 */
 	@SubscribeEvent
 	public static void onLivingDropsEvent(LivingDropsEvent event) {
 		if (isSummonedEntity(event.getEntity())) {
@@ -142,6 +164,10 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 		}
 	}
 
+	/**
+	 * Cancels any experience drops when this summon dies
+	 * @param event LivingExperienceDropEvent Event for when an entity drops experience on its death
+	 */
 	@SubscribeEvent
 	public static void onLivingExperienceDropEvent(LivingExperienceDropEvent event) {
 		if (isSummonedEntity(event.getEntity())) {
@@ -261,7 +287,7 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 
 	void updateDelegate() {
 
-		// Don't do anything for not summoned entities
+		// Don't do anything for not summoned entities, shouldn't happen anyways as this event is only called for summons!
 		if (!summoned) { return; }
 
 		// For some reason Minecraft reads the entity from NBT just after the entity is created, so setting -1 as a
@@ -286,7 +312,7 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 
 		if (this.summoned) {
 
-			nbt.setBoolean("summoned", true);
+			nbt.setBoolean(SummonedCreatureData.SUMMONED_TAG, true);
 
 			if (this.getOwnerId() != null) {
 				NBTTagCompound casterUUID = new NBTTagCompound();
@@ -306,7 +332,7 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 		if (nbt != null && !nbt.isEmpty()) {
 
 			// not really using this key since setOwnerId() and setLifetime() sets it to true anyways.
-			if (nbt.hasKey("summoned")) {
+			if (nbt.hasKey(SummonedCreatureData.SUMMONED_TAG)) {
 				if (nbt.hasKey("casterUUID")) {
 					this.setOwnerId(nbt.getCompoundTag("casterUUID").getUniqueId("casterUUID"));
 				}

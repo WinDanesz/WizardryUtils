@@ -45,23 +45,29 @@ public class LootRegistry{
 
 		if (event.getName().getNamespace().equals(Wizardry.MODID)) {
 
+			// pattern for any artefact subset table
 			Pattern p = Pattern.compile(".*subsets/(.*)_artefacts");
 			Matcher m = p.matcher(event.getName().getPath());
 
 			if (m.find()) {
 
+				// default pool name prefix is <tier>_artefacts
 				String poolName = m.group(1) + "_artefacts";
+
+				// turning this prefix into an EnumRarity
 				EnumRarity rarity = EnumRarity.valueOf(m.group(1).toUpperCase());
 
+				// items of this list will be injected into this loot table
 				List<Item> inject = new ArrayList<>();
+
+				// check all artefacts in the artefact list, if rarity matches, they'll be added to the inject list
 				for (Item artefact : artefacts) {
-					if (artefact.getRarity(new ItemStack(artefact)) == rarity) {
+					if (artefact.getForgeRarity(new ItemStack(artefact)) == rarity) {
 						inject.add(artefact);
 					}
 				}
 
 				if (!inject.isEmpty()) {
-
 					int index = 0;
 					for (Item item : inject) {
 						WizardryUtils.logger.debug("Injecting loot entry item " + item.getRegistryName().toString() + " to " + poolName + " Wizardry loot table.");
