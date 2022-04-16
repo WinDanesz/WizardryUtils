@@ -18,7 +18,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -31,9 +33,11 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -51,14 +55,14 @@ import java.util.UUID;
 public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 
 	public static final String SUMMONED_TAG = SummonedCreatureData.SUMMONED_TAG;
-
+	public static final String CASTER_UUID_TAG = "casterUUID";
+	public static final String LIFETIME_TAG = "lifetime";
 	/**
 	 * Static instance of what I like to refer to as the capability key. Private because, well, it's internal!
+	 * This annotation does some crazy Forge magic behind the scenes and assigns this field a value.
 	 */
-	// This annotation does some crazy Forge magic behind the scenes and assigns this field a value.
 	@CapabilityInject(SummonedCreatureData.class)
 	private static final Capability<SummonedCreatureData> SUMMONED_CREATURE_DATA_CAPABILITY = null;
-
 	/**
 	 * The player this WizardData instance belongs to.
 	 */
@@ -110,6 +114,7 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 
 	/**
 	 * Checks if the given entity is considered as a summon (= has the {@link SummonedCreatureData#SUMMONED_CREATURE_DATA_CAPABILITY}) capability).
+	 *
 	 * @param entity the entity to check
 	 * @return true if the entity has the capability, false otherwise
 	 */
@@ -130,6 +135,7 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 	/**
 	 * Every time this entity enters this world (new entity or loaded from disk), this method checks if the entity is a summon.
 	 * If the entity is a summon, the summon's target tasks are immediately replaced by {@link SummonedCreatureData#updateEntityTargetTasks(net.minecraft.entity.EntityCreature)}
+	 *
 	 * @param event
 	 */
 	@SubscribeEvent
@@ -143,7 +149,43 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 	}
 
 	/**
+	 * Cancels any item interactions with this summon, except for Wands (to allow the commanding feature).
+	 * This should take care about exploiting summoned mobs by breeding them.
+	 *
+	 * @param event EntityInteract This event is fired on both sides when the player right clicks an entity.
+	 */
+	@SubscribeEvent
+	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+		if (isSummonedEntity(event.getEntity())) {
+			// The hand involved in this interaction. Will never be null.
+			ItemStack stack = event.getEntityPlayer().getHeldItem(event.getHand());
+
+			// Cancel if this is a breeding item for this mob, should cover most of the exploits
+			if (event.getEntity() instanceof EntityAnimal && (((EntityAnimal) event.getEntity()).isBreedingItem(stack))) {
+				event.setCanceled(true);
+			}
+		}
+	}
+
+	/**
+	 * If somehow players manage to bypass the restriction in {@link SummonedCreatureData#onEntityInteract(net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract)}
+	 * for summons, this will still cancel any baby entities which had a summon parent!
+	 * <p>
+	 * If this event is canceled, the child Entity is not added to the world, and the parents will no longer attempt to mate.
+	 *
+	 * @param event BabyEntitySpawnEvent is fired just before a baby entity is about to be spawned.
+	 */
+	@SubscribeEvent
+	public static void onBabyEntitySpawnEvent(BabyEntitySpawnEvent event) {
+		if (isSummonedEntity(event.getParentA()) || isSummonedEntity(event.getParentB())) {
+			// Sorry, you are not supposed to exist
+			event.setCanceled(true);
+		}
+	}
+
+	/**
 	 * Calls the {@link SummonedCreatureData#updateDelegate()} method of the summoned entity each tick.
+	 *
 	 * @param event LivingUpdateEvent
 	 */
 	@SubscribeEvent
@@ -155,6 +197,7 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 
 	/**
 	 * Cancels any item loot drops when this summon dies
+	 *
 	 * @param event LivingDropsEvent Event is fired when an Entity's death causes dropped items to appear.
 	 */
 	@SubscribeEvent
@@ -166,6 +209,7 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 
 	/**
 	 * Cancels any experience drops when this summon dies
+	 *
 	 * @param event LivingExperienceDropEvent Event for when an entity drops experience on its death
 	 */
 	@SubscribeEvent
@@ -202,7 +246,7 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 		if (AllyDesignationSystem.isValidTarget(this.getCaster(), target)) {
 
 			if (target instanceof EntityLivingBase && isSummonedEntity(target)) {
-				SummonedCreatureData data = get((EntityLivingBase)target);
+				SummonedCreatureData data = get((EntityLivingBase) target);
 				if ((data.getCaster() != null && data.getCaster() == this.getCaster()) || AllyDesignationSystem.isAllied(data.getCaster(), this.getCaster())) {
 					return false;
 				}
@@ -316,11 +360,11 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 
 			if (this.getOwnerId() != null) {
 				NBTTagCompound casterUUID = new NBTTagCompound();
-				casterUUID.setUniqueId("casterUUID", this.getOwnerId());
-				nbt.setTag("casterUUID", casterUUID);
+				casterUUID.setUniqueId(CASTER_UUID_TAG, this.getOwnerId());
+				nbt.setTag(CASTER_UUID_TAG, casterUUID);
 			}
 			if (lifetime != -1) {
-				nbt.setInteger("lifetime", getLifetime());
+				nbt.setInteger(LIFETIME_TAG, getLifetime());
 			}
 		}
 
@@ -333,11 +377,11 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 
 			// not really using this key since setOwnerId() and setLifetime() sets it to true anyways.
 			if (nbt.hasKey(SummonedCreatureData.SUMMONED_TAG)) {
-				if (nbt.hasKey("casterUUID")) {
-					this.setOwnerId(nbt.getCompoundTag("casterUUID").getUniqueId("casterUUID"));
+				if (nbt.hasKey(CASTER_UUID_TAG)) {
+					this.setOwnerId(nbt.getCompoundTag(CASTER_UUID_TAG).getUniqueId(CASTER_UUID_TAG));
 				}
-				if (nbt.hasKey("lifetime")) {
-					this.setLifetime(nbt.getInteger("lifetime"));
+				if (nbt.hasKey(LIFETIME_TAG)) {
+					this.setLifetime(nbt.getInteger(LIFETIME_TAG));
 				}
 			}
 		}
