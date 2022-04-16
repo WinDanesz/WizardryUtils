@@ -10,6 +10,7 @@ import com.windanesz.wizardryutils.item.ITickableArtefact;
 import com.windanesz.wizardryutils.item.ItemNewArtefact;
 import electroblob.wizardry.item.ItemArtefact;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -84,50 +85,30 @@ public final class BaublesIntegration {
 		return artefacts;
 	}
 
-	// Shamelessly copied from The Twilight Forest, with a few modifications
-	@SuppressWarnings("unchecked")
-	public static final class ArtefactBaubleProvider implements ICapabilityProvider {
-
-		private BaubleType type;
-
-		public ArtefactBaubleProvider(ItemNewArtefact.Type type) {
-			this.type = OTHER_ARTEFACT_TYPE_MAP.get(type);
-		}
-
-		@Override
-		public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-			return capability == BaublesCapabilities.CAPABILITY_ITEM_BAUBLE;
-		}
-
-		@Override
-		public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-			// This lambda expression is an implementation of the entire IBauble interface
-			return capability == BaublesCapabilities.CAPABILITY_ITEM_BAUBLE ? (T) (IBauble) itemStack -> type : null;
-		}
-	}
-
 	/**
 	 * Gets all equipped artefacts for the given player with their slot number.
+	 *
 	 * @param player the player to check
 	 * @return all artefacts, including both the default and new types and their current bauble slot. Excludes BaubleType.TRINKLET, as that is not used as an artefact anyways.
 	 */
 	public static Map<Integer, ItemStack> getAllEquippedArtefacts(EntityPlayer player) {
-
 		Map<Integer, ItemStack> artefacts = new HashMap<>();
+		IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
 
-		for (int i = 0; i <= 6; i++) {
-			ItemStack stack = BaublesApi.getBaublesHandler(player).getStackInSlot(i);
+		for (int slot = 0; slot < baubles.getSlots(); slot++) {
+			ItemStack stack = baubles.getStackInSlot(slot);
 			if (stack.getItem() instanceof ItemArtefact || stack.getItem() instanceof ItemArtefact) {
-				artefacts.put(i, stack);
+				artefacts.put(slot, stack);
 			}
 		}
 
 		return artefacts;
 	}
 
-	 /**
+	/**
 	 * Returns all equipped artefact ItemStack of the given type for the given player. This includes both the new types of {@link ItemNewArtefact} and the other types {@link ItemArtefact}.
-	 * @param player player to check
+	 *
+	 * @param player       player to check
 	 * @param artefactType this must be an array of {@link ItemArtefact.Type} enums and {@link ItemNewArtefact.Type} enum, the method won't do anything for other objects!
 	 * @return a List of ItemStacks for the given artefact type.
 	 */
@@ -166,11 +147,46 @@ public final class BaublesIntegration {
 	public static void tickWornArtefacts(EntityPlayer player) {
 
 		IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
+
 		for (int i = 0; i < baubles.getSlots(); i++) {
 			ItemStack stack = baubles.getStackInSlot(i);
-			if (stack.getItem() instanceof ITickableArtefact) {
-				((ITickableArtefact) stack.getItem()).onWornTick(stack, player);
+			Item item = stack.getItem();
+
+			if (item instanceof ITickableArtefact) {
+
+				boolean enabled = true;
+				if (item instanceof ItemArtefact) {
+					enabled = ((ItemArtefact) item).isEnabled();
+				} else if (item instanceof ItemNewArtefact) {
+//					enabled = ((ItemNewArtefact) item).isEnabled(); TODO
+				}
+
+				if (enabled) {
+					((ITickableArtefact) stack.getItem()).onWornTick(stack, player);
+				}
 			}
+		}
+	}
+
+	// Shamelessly copied from The Twilight Forest, with a few modifications
+	@SuppressWarnings("unchecked")
+	public static final class ArtefactBaubleProvider implements ICapabilityProvider {
+
+		private BaubleType type;
+
+		public ArtefactBaubleProvider(ItemNewArtefact.Type type) {
+			this.type = OTHER_ARTEFACT_TYPE_MAP.get(type);
+		}
+
+		@Override
+		public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+			return capability == BaublesCapabilities.CAPABILITY_ITEM_BAUBLE;
+		}
+
+		@Override
+		public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+			// This lambda expression is an implementation of the entire IBauble interface
+			return capability == BaublesCapabilities.CAPABILITY_ITEM_BAUBLE ? (T) (IBauble) itemStack -> type : null;
 		}
 	}
 }
