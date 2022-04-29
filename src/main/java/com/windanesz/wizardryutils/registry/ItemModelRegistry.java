@@ -24,7 +24,7 @@ public final class ItemModelRegistry {
 	private static List<String> ADDON_MODID_REGISTRY = new ArrayList<>();
 
 	/**
-	 * Call this method with your modid once to let WizardryUtils handle the registry of item models for the mod.
+	 * Call this method with your modid from preinit once to let WizardryUtils handle the registry of item models for the mod.
 	 * @param modid the modid of the mod being registered
 	 */
 	public static void registerModForAutoItemModelRegistry(String modid) {

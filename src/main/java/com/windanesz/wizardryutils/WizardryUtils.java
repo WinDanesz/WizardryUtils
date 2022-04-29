@@ -1,6 +1,7 @@
 package com.windanesz.wizardryutils;
 
 import com.windanesz.wizardryutils.capability.SummonedCreatureData;
+import com.windanesz.wizardryutils.capability.SummonedItemCapability;
 import com.windanesz.wizardryutils.integration.baubles.BaublesIntegration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -47,6 +48,7 @@ public class WizardryUtils {
 
 		// Capabilities
 		SummonedCreatureData.register();
+		SummonedItemCapability.register();
 
 		artefactSettings.initConfig(event);
 	}
