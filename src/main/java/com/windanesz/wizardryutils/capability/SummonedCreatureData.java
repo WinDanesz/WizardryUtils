@@ -35,15 +35,13 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
-import java.util.UUID;
 
 /**
  * Summoned entity capability, based on {@link electroblob.wizardry.data.WizardData} - Author: Electroblob
@@ -52,27 +50,19 @@ import java.util.UUID;
  */
 // On the plus side, having to rethink this class allowed me to clean it up a lot.
 @Mod.EventBusSubscriber
-public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
+public class SummonedCreatureData extends SummonedThing {
 
-	public static final String SUMMONED_TAG = SummonedCreatureData.SUMMONED_TAG;
-	public static final String CASTER_UUID_TAG = "casterUUID";
-	public static final String LIFETIME_TAG = "lifetime";
 	/**
 	 * Static instance of what I like to refer to as the capability key. Private because, well, it's internal!
 	 * This annotation does some crazy Forge magic behind the scenes and assigns this field a value.
 	 */
 	@CapabilityInject(SummonedCreatureData.class)
 	private static final Capability<SummonedCreatureData> SUMMONED_CREATURE_DATA_CAPABILITY = null;
+
 	/**
-	 * The player this WizardData instance belongs to.
+	 * The entity this capability instance belongs to.
 	 */
 	private final EntityLivingBase minion;
-
-	// Field implementations
-	private int lifetime = -1;
-	private boolean summoned = false;
-	private UUID casterUUID;
-	private UUID owner;
 
 	public SummonedCreatureData() {
 		this(null); // Nullary constructor for the registration method factory parameter
@@ -120,103 +110,6 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 	 */
 	public static boolean isSummonedEntity(Entity entity) {
 		return entity instanceof EntityCreature && get((EntityCreature) entity) != null && get((EntityCreature) entity).summoned;
-	}
-
-	// ============================================== Event Handlers ==============================================
-
-	@SubscribeEvent
-	public static void attachCapability(AttachCapabilitiesEvent<Entity> event) {
-		if (event.getObject() instanceof EntityCreature) {
-			event.addCapability(new ResourceLocation(WizardryUtils.MODID, "SummonedCreatureData"),
-					new Provider((EntityLivingBase) event.getObject()));
-		}
-	}
-
-	/**
-	 * Every time this entity enters this world (new entity or loaded from disk), this method checks if the entity is a summon.
-	 * If the entity is a summon, the summon's target tasks are immediately replaced by {@link SummonedCreatureData#updateEntityTargetTasks(net.minecraft.entity.EntityCreature)}
-	 *
-	 * @param event
-	 */
-	@SubscribeEvent
-	public static void onEntityJoinWorldEvent(EntityJoinWorldEvent event) {
-		if (isSummonedEntity(event.getEntity())) {
-			EntityLiving entity = (EntityLiving) event.getEntity();
-
-			SummonedCreatureData data = get(entity);
-			data.updateEntityTargetTasks((EntityCreature) entity);
-		}
-	}
-
-	/**
-	 * Cancels any item interactions with this summon, except for Wands (to allow the commanding feature).
-	 * This should take care about exploiting summoned mobs by breeding them.
-	 *
-	 * @param event EntityInteract This event is fired on both sides when the player right clicks an entity.
-	 */
-	@SubscribeEvent
-	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-		if (isSummonedEntity(event.getEntity())) {
-			// The hand involved in this interaction. Will never be null.
-			ItemStack stack = event.getEntityPlayer().getHeldItem(event.getHand());
-
-			// Cancel if this is a breeding item for this mob, should cover most of the exploits
-			if (event.getEntity() instanceof EntityAnimal && (((EntityAnimal) event.getEntity()).isBreedingItem(stack))) {
-				event.setCanceled(true);
-			}
-		}
-	}
-
-	/**
-	 * If somehow players manage to bypass the restriction in {@link SummonedCreatureData#onEntityInteract(net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract)}
-	 * for summons, this will still cancel any baby entities which had a summon parent!
-	 * <p>
-	 * If this event is canceled, the child Entity is not added to the world, and the parents will no longer attempt to mate.
-	 *
-	 * @param event BabyEntitySpawnEvent is fired just before a baby entity is about to be spawned.
-	 */
-	@SubscribeEvent
-	public static void onBabyEntitySpawnEvent(BabyEntitySpawnEvent event) {
-		if (isSummonedEntity(event.getParentA()) || isSummonedEntity(event.getParentB())) {
-			// Sorry, you are not supposed to exist
-			event.setCanceled(true);
-		}
-	}
-
-	/**
-	 * Calls the {@link SummonedCreatureData#updateDelegate()} method of the summoned entity each tick.
-	 *
-	 * @param event LivingUpdateEvent
-	 */
-	@SubscribeEvent
-	public static void onLivingUpdateEvent(LivingUpdateEvent event) {
-		if (isSummonedEntity(event.getEntity())) {
-			SummonedCreatureData.get((EntityCreature) event.getEntity()).updateDelegate();
-		}
-	}
-
-	/**
-	 * Cancels any item loot drops when this summon dies
-	 *
-	 * @param event LivingDropsEvent Event is fired when an Entity's death causes dropped items to appear.
-	 */
-	@SubscribeEvent
-	public static void onLivingDropsEvent(LivingDropsEvent event) {
-		if (isSummonedEntity(event.getEntity())) {
-			event.setCanceled(true);
-		}
-	}
-
-	/**
-	 * Cancels any experience drops when this summon dies
-	 *
-	 * @param event LivingExperienceDropEvent Event for when an entity drops experience on its death
-	 */
-	@SubscribeEvent
-	public static void onLivingExperienceDropEvent(LivingExperienceDropEvent event) {
-		if (isSummonedEntity(event.getEntity())) {
-			event.setCanceled(true);
-		}
 	}
 
 	public void updateEntityTargetTasks(EntityCreature minion) {
@@ -286,26 +179,6 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 		return false;
 	}
 
-	public int getLifetime() { return lifetime; }
-
-	/**
-	 * Sets the lifetime of this minion. Also handles marking it as a summoned entity if necessary.
-	 *
-	 * @param lifetime in ticks. Set to -1 to make the entity not despawn.
-	 */
-	public void setLifetime(int lifetime) {
-		this.lifetime = lifetime;
-		if (!summoned) { summoned = true; }
-	}
-
-	public UUID getOwnerId() {
-		return casterUUID;
-	}
-
-	public void setOwnerId(UUID uuid) {
-		this.casterUUID = uuid;
-	}
-
 	public EntityLivingBase getCaster() { // Kept despite the above method because it returns an EntityLivingBase
 
 		Entity caster = EntityUtils.getEntityByUUID(minion.world, getOwnerId());
@@ -317,16 +190,6 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 
 		return (EntityLivingBase) caster;
 
-	}
-
-	/**
-	 * Sets the caster of this minion who has summoned it. Also handles marking it as a summoned entity if necessary.
-	 *
-	 * @param caster the owner (caster) of this entity.
-	 */
-	public void setCaster(@Nullable EntityLivingBase caster) {
-		setOwnerId(caster == null ? null : caster.getUniqueID());
-		if (!summoned) { summoned = true; }
 	}
 
 	void updateDelegate() {
@@ -349,41 +212,100 @@ public class SummonedCreatureData implements INBTSerializable<NBTTagCompound> {
 
 	}
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public NBTTagCompound serializeNBT() {
-		NBTTagCompound nbt = new NBTTagCompound();
+	// ============================================== Event Handlers ==============================================
 
-		if (this.summoned) {
-
-			nbt.setBoolean(SummonedCreatureData.SUMMONED_TAG, true);
-
-			if (this.getOwnerId() != null) {
-				NBTTagCompound casterUUID = new NBTTagCompound();
-				casterUUID.setUniqueId(CASTER_UUID_TAG, this.getOwnerId());
-				nbt.setTag(CASTER_UUID_TAG, casterUUID);
-			}
-			if (lifetime != -1) {
-				nbt.setInteger(LIFETIME_TAG, getLifetime());
-			}
+	@SubscribeEvent
+	public static void attachCapability(AttachCapabilitiesEvent<Entity> event) {
+		if (event.getObject() instanceof EntityCreature) {
+			event.addCapability(new ResourceLocation(WizardryUtils.MODID, "SummonedCreatureData"),
+					new Provider((EntityLivingBase) event.getObject()));
 		}
-
-		return nbt;
 	}
 
-	@Override
-	public void deserializeNBT(NBTTagCompound nbt) {
-		if (nbt != null && !nbt.isEmpty()) {
+	/**
+	 * Every time this entity enters this world (new entity or loaded from disk), this method checks if the entity is a summon.
+	 * If the entity is a summon, the summon's target tasks are immediately replaced by {@link SummonedCreatureData#updateEntityTargetTasks(net.minecraft.entity.EntityCreature)}
+	 *
+	 * @param event
+	 */
+	@SubscribeEvent
+	public static void onEntityJoinWorldEvent(EntityJoinWorldEvent event) {
+		if (isSummonedEntity(event.getEntity())) {
+			EntityLiving entity = (EntityLiving) event.getEntity();
 
-			// not really using this key since setOwnerId() and setLifetime() sets it to true anyways.
-			if (nbt.hasKey(SummonedCreatureData.SUMMONED_TAG)) {
-				if (nbt.hasKey(CASTER_UUID_TAG)) {
-					this.setOwnerId(nbt.getCompoundTag(CASTER_UUID_TAG).getUniqueId(CASTER_UUID_TAG));
-				}
-				if (nbt.hasKey(LIFETIME_TAG)) {
-					this.setLifetime(nbt.getInteger(LIFETIME_TAG));
-				}
+			SummonedCreatureData data = get(entity);
+			data.updateEntityTargetTasks((EntityCreature) entity);
+		}
+	}
+
+	/**
+	 * Cancels any item interactions with this summon, except for Wands (to allow the commanding feature).
+	 * This should take care about exploiting summoned mobs by breeding them.
+	 *
+	 * @param event EntityInteract This event is fired on both sides when the player right clicks an entity.
+	 */
+	@SubscribeEvent
+	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+		if (isSummonedEntity(event.getEntity())) {
+			// The hand involved in this interaction. Will never be null.
+			ItemStack stack = event.getEntityPlayer().getHeldItem(event.getHand());
+
+			// Cancel if this is a breeding item for this mob, should cover most of the exploits
+			if (event.getEntity() instanceof EntityAnimal && (((EntityAnimal) event.getEntity()).isBreedingItem(stack))) {
+				event.setCanceled(true);
 			}
+		}
+	}
+
+	/**
+	 * If somehow players manage to bypass the restriction in {@link SummonedCreatureData#onEntityInteract(net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract)}
+	 * for summons, this will still cancel any baby entities which had a summon parent!
+	 * <p>
+	 * If this event is canceled, the child Entity is not added to the world, and the parents will no longer attempt to mate.
+	 *
+	 * @param event BabyEntitySpawnEvent is fired just before a baby entity is about to be spawned.
+	 */
+	@SubscribeEvent
+	public static void onBabyEntitySpawnEvent(BabyEntitySpawnEvent event) {
+		if (isSummonedEntity(event.getParentA()) || isSummonedEntity(event.getParentB())) {
+			// Sorry, you are not supposed to exist
+			event.setCanceled(true);
+		}
+	}
+
+	/**
+	 * Calls the {@link SummonedCreatureData#updateDelegate()} method of the summoned entity each tick.
+	 *
+	 * @param event LivingUpdateEvent
+	 */
+	@SubscribeEvent
+	public static void onLivingUpdateEvent(LivingEvent.LivingUpdateEvent event) {
+		if (isSummonedEntity(event.getEntity())) {
+			SummonedCreatureData.get((EntityCreature) event.getEntity()).updateDelegate();
+		}
+	}
+
+	/**
+	 * Cancels any item loot drops when this summon dies
+	 *
+	 * @param event LivingDropsEvent Event is fired when an Entity's death causes dropped items to appear.
+	 */
+	@SubscribeEvent
+	public static void onLivingDropsEvent(LivingDropsEvent event) {
+		if (isSummonedEntity(event.getEntity())) {
+			event.setCanceled(true);
+		}
+	}
+
+	/**
+	 * Cancels any experience drops when this summon dies
+	 *
+	 * @param event LivingExperienceDropEvent Event for when an entity drops experience on its death
+	 */
+	@SubscribeEvent
+	public static void onLivingExperienceDropEvent(LivingExperienceDropEvent event) {
+		if (isSummonedEntity(event.getEntity())) {
+			event.setCanceled(true);
 		}
 	}
 

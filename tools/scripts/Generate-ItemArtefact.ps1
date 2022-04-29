@@ -9,8 +9,8 @@ param (
 
 ###############################################
 # Static
-$script:srcPath = "C:\git\AncientSpellcraft\src"
-$script:modid = "ancientspellcraft"
+$script:srcPath = "C:\git\WizardryUtils\src"
+$script:modid = "wizardryutils"
 ###############################################
 
 ################ Item Specific ################ 
