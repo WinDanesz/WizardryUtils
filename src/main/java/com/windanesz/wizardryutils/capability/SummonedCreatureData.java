@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.windanesz.wizardryutils.WizardryUtils;
 import com.windanesz.wizardryutils.entity.ai.EntityAIMinionOwnerHurtByTarget;
 import com.windanesz.wizardryutils.entity.ai.EntityAIMinionOwnerHurtTarget;
+import com.windanesz.wizardryutils.entity.ai.EntitySummonAIFollowOwner;
 import electroblob.wizardry.Wizardry;
 import electroblob.wizardry.entity.living.EntityWizard;
 import electroblob.wizardry.entity.living.ISummonedCreature;
@@ -30,7 +31,6 @@ import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
@@ -58,11 +58,14 @@ public class SummonedCreatureData extends SummonedThing {
 	 */
 	@CapabilityInject(SummonedCreatureData.class)
 	private static final Capability<SummonedCreatureData> SUMMONED_CREATURE_DATA_CAPABILITY = null;
+	public static final String FOLLOW_OWNER = "followOwner";
 
 	/**
 	 * The entity this capability instance belongs to.
 	 */
 	private final EntityLivingBase minion;
+
+	private boolean shouldFollowOwner = false;
 
 	public SummonedCreatureData() {
 		this(null); // Nullary constructor for the registration method factory parameter
@@ -127,6 +130,10 @@ public class SummonedCreatureData extends SummonedThing {
 		minion.targetTasks.addTask(1, new EntityAIHurtByTarget(minion, false));
 		minion.targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(minion, EntityLivingBase.class,
 				0, false, true, getTargetSelector()));
+
+		if (shouldFollowOwner) {
+			minion.tasks.addTask(5, new EntitySummonAIFollowOwner(minion, 1.0D, 10.0F, 2.0F));
+		}
 	}
 
 	private Predicate<Entity> getTargetSelector() {
@@ -210,6 +217,29 @@ public class SummonedCreatureData extends SummonedThing {
 					.spawn(minion.world);
 		}
 
+	}
+
+	@Override
+	public NBTTagCompound serializeNBT() {
+		NBTTagCompound nbt =  super.serializeNBT();
+		nbt.setBoolean(FOLLOW_OWNER, shouldFollowOwner);
+		return nbt;
+	}
+
+	@Override
+	public void deserializeNBT(NBTTagCompound nbt) {
+		super.deserializeNBT(nbt);
+		if (nbt.hasKey(FOLLOW_OWNER)) {
+			setFollowOwner(nbt.getBoolean(FOLLOW_OWNER));
+		}
+	}
+
+	public boolean getFollowOwner() {
+		return shouldFollowOwner;
+	}
+
+	public void setFollowOwner(boolean follow) {
+		this.shouldFollowOwner = follow;
 	}
 
 	// ============================================== Event Handlers ==============================================

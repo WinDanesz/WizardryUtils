@@ -19,7 +19,7 @@ public class EntityRegistry {
 	 * generally follows the values used in vanilla for each entity type.
 	 * Author: Electroblob
 	 */
-	enum TrackingType {
+	public enum TrackingType {
 
 		LIVING(80, 3, true),
 		PROJECTILE(64, 1, true),
@@ -51,7 +51,7 @@ public class EntityRegistry {
 	}
 
 	/**
-	 * Private helper method that simplifies the parts of an {@link EntityEntry} that are common to all entities.
+	 * Public helper method that simplifies the parts of an {@link EntityEntry} that are common to all entities.
 	 * This automatically assigns a network id, and accepts a {@link TrackingType} for automatic tracker assignment.
 	 *
 	 * @param entityClass The entity class to use.

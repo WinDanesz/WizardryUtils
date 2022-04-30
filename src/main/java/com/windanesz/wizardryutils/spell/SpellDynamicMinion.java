@@ -57,12 +57,18 @@ public class SpellDynamicMinion<T extends EntityCreature> extends Spell {
 	 * Whether the minions are spawned in mid-air. Defaults to false.
 	 */
 	protected boolean flying = false;
+	protected boolean shouldFollowOwner = false;
 
 	public SpellDynamicMinion(String modID, String name, Function<World, T> minionFactory) {
 		super(modID, name, SpellActions.SUMMON, false);
 		this.minionFactory = minionFactory;
 		addProperties(MINION_LIFETIME, MINION_COUNT, SUMMON_RADIUS);
 		this.npcSelector((e, o) -> true);
+	}
+
+	public SpellDynamicMinion<T> setShouldFollowOwner() {
+		this.shouldFollowOwner = true;
+		return this;
 	}
 
 	/**
@@ -179,6 +185,10 @@ public class SpellDynamicMinion<T extends EntityCreature> extends Spell {
 					minion.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 					minionData.setCaster(caster);
 					setLifetime(minion, (int) (getProperty(MINION_LIFETIME).floatValue() * modifiers.get(WizardryItems.duration_upgrade)));
+
+					if (shouldFollowOwner) {
+						minionData.setFollowOwner(true);
+					}
 
 					// Modifier implementation
 					// Attribute modifiers are pretty opaque, see https://minecraft.gamepedia.com/Attribute#Modifiers
