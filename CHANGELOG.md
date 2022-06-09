@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.0] - 2022-06-09
+### :sparkles: New Features
+- [`f351ee5`](https://github.com/WinDanesz/WizardryUtils/commit/f351ee562e93b031ad7201657726443ea7ee9254) - Dynamic minions now can be set to follow their owner *(commit by [@WinDanesz](https://github.com/WinDanesz))*
+
+### :wrench: Chores
+- [`83d7d2a`](https://github.com/WinDanesz/WizardryUtils/commit/83d7d2a39de83f88ed610d6b55ce8721dac138c4) - v1.0.0 *(commit by [@WinDanesz](https://github.com/WinDanesz))*
+
+
 ## [v0.1.2] - 2022-04-29
 ### :sparkles: New Features
 - [`94b0a4a`](https://github.com/WinDanesz/WizardryUtils/commit/94b0a4ae09bec60cd5b89bfccda1e3a38f70b4d3) - Added support for BODY Baubles slot artefacts *(commit by [@WinDanesz](https://github.com/WinDanesz))*
@@ -36,3 +44,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [v0.1.1]: https://github.com/WinDanesz/WizardryUtils/compare/v0.1.0...v0.1.1
 [v0.1.2]: https://github.com/WinDanesz/WizardryUtils/compare/v0.1.1...v0.1.2
+[v1.0.0]: https://github.com/WinDanesz/WizardryUtils/compare/v0.1.2...v1.0.0
