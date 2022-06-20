@@ -1,9 +1,9 @@
-<h2>Version v1.0.0 - 6/9/2022</h2>
+<h2>Version v1.0.1 - 6/20/2022</h2>
 <p>&nbsp;</p>
 <h3>What's Changed</h3>
 <p><span style="font-size: 1.2rem;">&nbsp;</span></p>
-<h4><strong>Features</strong></h4>
-<p>- Dynamic minions now can be set to follow their owner</p>
+<h4><strong>Bug Fixes</strong></h4>
+<p>- Fixed server-side crash</p>
 <p>&nbsp;</p>
 <p>As always, the easiest way to get help or feedback is through the Discord server! Find the link on the CurseForge page.</p>
 <p>&nbsp;</p>
