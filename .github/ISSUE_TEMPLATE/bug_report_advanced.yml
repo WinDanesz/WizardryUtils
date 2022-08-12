@@ -1,4 +1,5 @@
 name: 🐛 Bug Report (Advanced)
+description: Bug Report (Advanced)
 title: "[Bug] <write the title here>"
 body:
   - type: textarea
