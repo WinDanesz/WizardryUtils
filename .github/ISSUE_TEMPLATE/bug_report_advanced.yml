@@ -1,0 +1,10 @@
+name: 🐛 Bug Report (Advanced)
+description: Yes, it was all a lie.. This is the simpler bug report form. Please Use the other one if you have more details to fill.
+title: "[Bug] <write the title here>"
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+    validations:
+      required: true
