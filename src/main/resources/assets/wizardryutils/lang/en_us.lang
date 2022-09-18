@@ -12,3 +12,13 @@ item.wizardryutils:belt_test.desc=Dev only item that does not appear in-game nor
 message.wizardryutils:cant_open_gui_with_bound_item=Can't use this while holding a Bound item
 message.wizardryutils:must_summon_with_empty_hand=Bound items can only be summoned to an empty hand
 name.wizardryutils:bound_item=Bound Item (Disappears in %s seconds)
+
+attribute.name.wizardryutils.SpellBlast=% Spell Blast
+attribute.name.wizardryutils.SpellChargeup=% Spell Chargeup
+attribute.name.wizardryutils.SpellCost=% Spell Cost
+attribute.name.wizardryutils.SpellCooldown=% Spell Cooldown
+attribute.name.wizardryutils.SpellDuration=% Spell Duration
+attribute.name.wizardryutils.SpellPotency=% Spell Potency
+
+attribute.name.wizardryutils.SpellSiphon=% Spell Siphon
+attribute.name.wizardryutils.SpellCondensing=Mana Condensing

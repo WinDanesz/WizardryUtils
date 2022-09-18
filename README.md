@@ -11,7 +11,9 @@ WizardryUtils contains shared functionality and code for my addons for Electrobl
 - Capability-based handler for registering "dynamic" minion spells. This means minion spells no longer have to register a duplicate variant of the entity which
   implements various interfaces and methods to e.g., remove loot, drops.
 - Shared code for automated artefact injection into Shrine loot tables
+- Automated config generator for registered artefacts
 - Automated item model registry
+- SpellModifiers implemented as [entity attribute modifiers](https://github.com/WinDanesz/WizardryUtils/wiki/Attribute-Modifiers)
 
 **Planned features**
 - Automated spell wiki page generator

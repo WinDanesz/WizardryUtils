@@ -3,6 +3,7 @@ package com.windanesz.wizardryutils;
 import com.windanesz.wizardryutils.capability.SummonedCreatureData;
 import com.windanesz.wizardryutils.capability.SummonedItemCapability;
 import com.windanesz.wizardryutils.integration.baubles.BaublesIntegration;
+import com.windanesz.wizardryutils.server.Attributes;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -40,6 +41,8 @@ public class WizardryUtils {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		Attributes.init();
+
 		logger = event.getModLog();
 
 		proxy.registerRenderers();

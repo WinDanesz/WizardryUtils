@@ -3,6 +3,7 @@ package com.windanesz.wizardryutils.tools;
 import electroblob.wizardry.registry.WizardryPotions;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -44,10 +45,21 @@ public class WizardryUtilsTools {
 
 	/**
 	 * A {@link EntityLivingBase#isEntityUndead()} check, which also handles considering entities with Curse of Undeath as undeads.
+	 *
 	 * @param entity the entity to check
 	 * @return true, if the entity is an undead or is cursed to be an undead
 	 */
 	public static boolean isEntityConsideredUndead(Entity entity) {
 		return entity instanceof EntityLivingBase && (((EntityLivingBase) entity).isEntityUndead() || ((EntityLivingBase) entity).isPotionActive(WizardryPotions.curse_of_undeath));
+	}
+
+	public static Double getAttribute(EntityLivingBase entity, String attributeName) {
+		for (IAttributeInstance instance : entity.getAttributeMap().getAllAttributes()) {
+			if (instance.getAttribute().getName().equals(attributeName)) {
+				return instance.getAttributeValue();
+			}
+		}
+
+		return null;
 	}
 }
