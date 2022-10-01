@@ -36,6 +36,11 @@ public class Settings {
 		@Config.RequiresMcRestart
 		public boolean baubles_integration = true;
 
+		@Config.Name("Crafttweaker Integration")
+		@Config.Comment("Enable/Disable Crafttweaker integrations for spell casting events and other stuff. Setting this to false will cause the integration to not load and therefore zenscripts referencing anything added by this mod will break.")
+		@Config.RequiresMcRestart
+		public boolean crafttweaker_integration = true;
+
 		@Config.Name("Inject Artefacts To Loot Tables")
 		@Config.Comment("Enable/Disable the functionality to automatically inject spell pack artefacts managed by WizardryUtils into the Wizardry Shrine loot tables."
 				+ "\nDisabling this will cause that no spell pack which depends on WizardryUtils will have its artefacts appearing in Shrine chests!")

@@ -14,6 +14,7 @@ WizardryUtils contains shared functionality and code for my addons for Electrobl
 - Automated config generator for registered artefacts
 - Automated item model registry
 - SpellModifiers implemented as [entity attribute modifiers](https://github.com/WinDanesz/WizardryUtils/wiki/Attribute-Modifiers)
+- Crafttweaker support for spellcast events
 
 **Planned features**
 - Automated spell wiki page generator

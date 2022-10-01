@@ -3,6 +3,7 @@ package com.windanesz.wizardryutils;
 import com.windanesz.wizardryutils.capability.SummonedCreatureData;
 import com.windanesz.wizardryutils.capability.SummonedItemCapability;
 import com.windanesz.wizardryutils.integration.baubles.BaublesIntegration;
+import com.windanesz.wizardryutils.integration.crafttweaker.CrafttweakerIntegration;
 import com.windanesz.wizardryutils.server.Attributes;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -48,6 +49,7 @@ public class WizardryUtils {
 		proxy.registerRenderers();
 
 		BaublesIntegration.init();
+		CrafttweakerIntegration.init();
 
 		// Capabilities
 		SummonedCreatureData.register();
@@ -64,6 +66,7 @@ public class WizardryUtils {
 		MinecraftForge.EVENT_BUS.register(instance);
 		proxy.registerParticles();
 		proxy.init();
+
 	}
 
 	@EventHandler

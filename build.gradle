@@ -127,7 +127,8 @@ dependencies {
 
     implementation fg.deobf("curse.maven:ElectroblobsWizardry-${wizardry_projectid}:${wizardry_fileid}")
     implementation fg.deobf("curse.maven:baubles-${baubles_projectid}:${baubles_fileid}")
-
+    //implementation "com.blamejared.crafttweaker:CraftTweaker2-MC1120-Main-1.12-4.1.9.6"
+    compileOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.643"
     //// Dependencies ////
 }
 
