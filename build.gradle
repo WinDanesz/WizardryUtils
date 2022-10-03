@@ -315,6 +315,10 @@ processResources {
 }
 
 task replaceTokens(type: Sync) {
+    if (System.getenv('PROJECT_VERSION') != null) {
+        version = "${project.mc_version}-" + System.getenv('PROJECT_VERSION')
+    }
+
     // replace @TOKENS@ in main file
     from sourceSets.main.java
     inputs.property 'version', project.mc_version.toString()

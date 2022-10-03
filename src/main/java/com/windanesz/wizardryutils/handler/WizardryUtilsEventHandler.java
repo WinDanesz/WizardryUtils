@@ -87,7 +87,6 @@ public class WizardryUtilsEventHandler {
 	public static void onEntityConstructingEvent(EntityEvent.EntityConstructing event) {
 		Entity entity = event.getEntity();
 		if (entity instanceof EntityLivingBase) {
-			//Add new stealth-related attributes
 			Attributes.addAttributes((EntityLivingBase) entity);
 		}
 	}

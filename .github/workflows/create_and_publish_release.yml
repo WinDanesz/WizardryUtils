@@ -32,7 +32,9 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+        run: |
+          echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+          echo "foo=$(echo $PROJECT_VERSION | cut -d / -f 3)" >> $GITHUB_ENV
 
       - name: Create release
         uses: ncipollo/release-action@v1
