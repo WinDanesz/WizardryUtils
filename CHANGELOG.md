@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.1.0] - 2022-10-04
+### :sparkles: New Features
+- [`43afbff`](https://github.com/WinDanesz/WizardryUtils/commit/43afbffb89bd80711553106ec22d634ac36c1a4b) - Implemented spell modifiers as attribute modifiers. This way any item can have spell modifiers the same way vanilla attribute modifiers work. See the wiki for more info at https://github.com/WinDanesz/WizardryUtils/wiki/Attribute-Modifiers *(commit by [@WinDanesz](https://github.com/WinDanesz))*
+- [`d40beb1`](https://github.com/WinDanesz/WizardryUtils/commit/d40beb1f62a68849678818faa18dd477e4c6e9d1) - Crafttweaker support implementation for spellcast events *(commit by [@WinDanesz](https://github.com/WinDanesz))*
+
+### :bug: Bug Fixes
+- [`a259f2f`](https://github.com/WinDanesz/WizardryUtils/commit/a259f2fb486d98d814e79db0cf8bded81d4525be) - Dynamic minions are no longer targeted by regular minions and allies *(commit by [@WinDanesz](https://github.com/WinDanesz))*
+- [`e8ef900`](https://github.com/WinDanesz/WizardryUtils/commit/e8ef9009f06922f416ae4adf9699e4db27df1336) - Dynamic minions shouldn't revenge target their owner anymore (unless enabled in the config) *(commit by [@WinDanesz](https://github.com/WinDanesz))*
+
+
 ## [v1.0.1] - 2022-06-20
 ### :bug: Bug Fixes
 - [`391fd7d`](https://github.com/WinDanesz/WizardryUtils/commit/391fd7da9dfbbb815999ad89b67c6d8bec4e84da) - Fixed server-side crash *(commit by [@WinDanesz](https://github.com/WinDanesz))*
@@ -54,3 +64,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v0.1.2]: https://github.com/WinDanesz/WizardryUtils/compare/v0.1.1...v0.1.2
 [v1.0.0]: https://github.com/WinDanesz/WizardryUtils/compare/v0.1.2...v1.0.0
 [v1.0.1]: https://github.com/WinDanesz/WizardryUtils/compare/v1.0.0...v1.0.1
+[v1.1.0]: https://github.com/WinDanesz/WizardryUtils/compare/v1.0.1...v1.1.0
