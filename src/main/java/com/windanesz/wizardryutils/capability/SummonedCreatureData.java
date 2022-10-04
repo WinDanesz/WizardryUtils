@@ -8,8 +8,13 @@ import com.windanesz.wizardryutils.entity.ai.EntitySummonAIFollowOwner;
 import electroblob.wizardry.Wizardry;
 import electroblob.wizardry.entity.living.EntityWizard;
 import electroblob.wizardry.entity.living.ISummonedCreature;
+import electroblob.wizardry.integration.DamageSafetyChecker;
 import electroblob.wizardry.util.AllyDesignationSystem;
 import electroblob.wizardry.util.EntityUtils;
+import electroblob.wizardry.util.IElementalDamage;
+import electroblob.wizardry.util.IndirectMinionDamage;
+import electroblob.wizardry.util.MagicDamage;
+import electroblob.wizardry.util.MinionDamage;
 import electroblob.wizardry.util.ParticleBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -24,6 +29,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
@@ -34,11 +42,14 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
+import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Arrays;
@@ -336,6 +347,65 @@ public class SummonedCreatureData extends SummonedThing {
 	public static void onLivingExperienceDropEvent(LivingExperienceDropEvent event) {
 		if (isSummonedEntity(event.getEntity())) {
 			event.setCanceled(true);
+		}
+	}
+
+	/** Adapted from {electroblob.wizardry.entity.living.ISummonedCreature.onLivingAttackEvent}  Author: Electroblob**/
+	@SubscribeEvent(priority = EventPriority.HIGHEST) // Needs to be first because we're replacing damage entirely
+	static void onLivingAttackEvent(LivingAttackEvent event){
+
+		// Rather than bother overriding entire attack methods in ISummonedCreature implementations, it's easier (and
+		// more robust) to use LivingAttackEvent to modify the damage source.
+		if(event.getSource().getTrueSource() != null && isSummonedEntity(event.getSource().getTrueSource())){
+
+			SummonedCreatureData data = get((EntityLivingBase) event.getSource().getTrueSource());
+			EntityLivingBase summoner = data.getCaster();
+
+			if(summoner != null){
+
+				event.setCanceled(true);
+				DamageSource newSource = event.getSource();
+				// Copies over the original DamageType if appropriate.
+				MagicDamage.DamageType type = event.getSource() instanceof IElementalDamage
+						? ((IElementalDamage)event.getSource()).getType()
+						: MagicDamage.DamageType.MAGIC;
+				// Copies over the original isRetaliatory flag if appropriate.
+				boolean isRetaliatory = event.getSource() instanceof IElementalDamage
+						&& ((IElementalDamage)event.getSource()).isRetaliatory();
+
+				// All summoned creatures are classified as magic, so it makes sense to do it this way.
+				if(event.getSource() instanceof EntityDamageSourceIndirect){
+					newSource = new IndirectMinionDamage(event.getSource().damageType,
+							event.getSource().getImmediateSource(), event.getSource().getTrueSource(), summoner, type,
+							isRetaliatory);
+				}else if(event.getSource() instanceof EntityDamageSource){
+					// Name is copied over so it uses the appropriate vanilla death message
+					newSource = new MinionDamage(event.getSource().damageType, event.getSource().getTrueSource(), summoner,
+							type, isRetaliatory);
+				}
+
+				// Copy over any relevant 'attributes' the original DamageSource might have had.
+				if(event.getSource().isExplosion()) newSource.setExplosion();
+				if(event.getSource().isFireDamage()) newSource.setFireDamage();
+				if(event.getSource().isProjectile()) newSource.setProjectile();
+
+				// For some reason Minecraft calculates knockback relative to DamageSource#getTrueSource. In vanilla this
+				// is unnoticeable, but it looks a bit weird with summoned creatures involved - so this fixes that.
+				// Damage safety checker falls back to the original damage source, so it behaves as if the creature has
+				// no summoner.
+				if(DamageSafetyChecker.attackEntitySafely(event.getEntity(), newSource, event.getAmount(), event.getSource(), false)){
+					// Uses event.getSource().getTrueSource() as this means the target is knocked back from the minion
+					EntityUtils.applyStandardKnockback(event.getSource().getTrueSource(), event.getEntityLiving());
+					//((ISummonedCreature)event.getSource().getTrueSource()).onSuccessfulAttack(event.getEntityLiving());
+					// If the target revenge-targeted the summoner, make it revenge-target the minion instead
+					// (if it didn't revenge-target, do nothing)
+					if(event.getEntityLiving().getRevengeTarget() == summoner
+							&& event.getSource().getTrueSource() instanceof EntityLivingBase){
+						event.getEntityLiving().setRevengeTarget((EntityLivingBase)event.getSource().getTrueSource());
+					}
+				}
+
+			}
 		}
 	}
 
