@@ -350,6 +350,18 @@ public class SummonedCreatureData extends SummonedThing {
 		}
 	}
 
+	@SubscribeEvent
+	public static void onLivingSetAttackTargetEvent(LivingSetAttackTargetEvent event) {
+		if (event.getEntityLiving() instanceof EntityLiving && event.getTarget() != null) {
+
+			if (isSummonedEntity(event.getTarget()) && !get(event.getTarget()).isValidTarget(event.getEntityLiving())) {
+				((EntityLiving)event.getEntityLiving()).setAttackTarget(null);
+			} else if (isSummonedEntity(event.getEntityLiving()) && !get(event.getEntityLiving()).isValidTarget(event.getTarget())) {
+				((EntityLiving)event.getEntityLiving()).setAttackTarget(null);
+			}
+		}
+	}
+
 	/** Adapted from {electroblob.wizardry.entity.living.ISummonedCreature.onLivingAttackEvent}  Author: Electroblob**/
 	@SubscribeEvent(priority = EventPriority.HIGHEST) // Needs to be first because we're replacing damage entirely
 	static void onLivingAttackEvent(LivingAttackEvent event){
