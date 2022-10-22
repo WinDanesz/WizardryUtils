@@ -7,6 +7,7 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentTranslation;
 
 public class WizardryUtilsTools {
 
@@ -61,5 +62,14 @@ public class WizardryUtilsTools {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Shorthand method to do instance check and sideonly checks for player messages
+	 */
+	public static void sendMessage(Entity player, String translationKey, boolean actionBar, Object... args) {
+		if (player instanceof EntityPlayer && !player.world.isRemote) {
+			((EntityPlayer) player).sendStatusMessage(new TextComponentTranslation(translationKey, args), actionBar);
+		}
 	}
 }
