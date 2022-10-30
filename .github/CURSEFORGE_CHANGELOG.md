@@ -1,14 +1,9 @@
-<h2>Version v1.1.0 - 10/4/2022</h2>
+<h2>Version v1.1.1 - 10/30/2022</h2>
 <p>&nbsp;</p>
 <h3>What's Changed</h3>
 <p><span style="font-size: 1.2rem;">&nbsp;</span></p>
 <h4><strong>Features</strong></h4>
-<p>- Implemented spell modifiers as attribute modifiers. This way any item can have spell modifiers the same way vanilla attribute modifiers work. See the wiki for more info at https://github.com/WinDanesz/WizardryUtils/wiki/Attribute-Modifiers</p>
-<p>- Crafttweaker support implementation for spellcast events</p>
-
-<h4><strong>Bug Fixes</strong></h4>
-<p>- Dynamic minions are no longer targeted by regular minions and allies</p>
-<p>- Dynamic minions shouldn't revenge target their owner anymore (unless enabled in the config)</p>
+<p>- Some more helper methods</p>
 <p>&nbsp;</p>
 <p>As always, the easiest way to get help or feedback is through the Discord server! Find the link on the CurseForge page.</p>
 <p>&nbsp;</p>

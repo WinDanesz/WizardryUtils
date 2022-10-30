@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.1.1] - 2022-10-30
+### :sparkles: New Features
+- [`96943fb`](https://github.com/WinDanesz/WizardryUtils/commit/96943fb62242e30e7c9d0c3aaa0bdd1fa3cf53bc) - Some more helper methods *(commit by [@WinDanesz](https://github.com/WinDanesz))*
+
+
 ## [v1.1.0] - 2022-10-04
 ### :sparkles: New Features
 - [`43afbff`](https://github.com/WinDanesz/WizardryUtils/commit/43afbffb89bd80711553106ec22d634ac36c1a4b) - Implemented spell modifiers as attribute modifiers. This way any item can have spell modifiers the same way vanilla attribute modifiers work. See the wiki for more info at https://github.com/WinDanesz/WizardryUtils/wiki/Attribute-Modifiers *(commit by [@WinDanesz](https://github.com/WinDanesz))*
@@ -65,3 +70,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v1.0.0]: https://github.com/WinDanesz/WizardryUtils/compare/v0.1.2...v1.0.0
 [v1.0.1]: https://github.com/WinDanesz/WizardryUtils/compare/v1.0.0...v1.0.1
 [v1.1.0]: https://github.com/WinDanesz/WizardryUtils/compare/v1.0.1...v1.1.0
+[v1.1.1]: https://github.com/WinDanesz/WizardryUtils/compare/v1.1.0...v1.1.1
