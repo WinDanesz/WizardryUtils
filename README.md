@@ -13,13 +13,14 @@ WizardryUtils contains shared functionality and code for my addons for Electrobl
 - Shared code for automated artefact injection into Shrine loot tables
 - Automated config generator for registered artefacts
 - Automated item model registry
-- SpellModifiers implemented as [entity attribute modifiers](https://github.com/WinDanesz/WizardryUtils/wiki/Attribute-Modifiers)
+- SpellModifiers implemented as [entity attribute modifiers](https://github.com/WinDanesz/WizardryUtils/wiki/Attribute-Modifiers) (see the [wiki](https://github.com/WinDanesz/WizardryUtils/wiki))
 - Crafttweaker support for spellcast events
+- Shared code for conjured item spells - this will allow easily creating new spells that summons temporary variants of modded (and vanilla) items
 
 **Planned features**
+- Automated spell summary table wiki page generator
 - Automated spell wiki page generator
-- Automated item wiki page generator (+Artefact item page generator)
-- Shared code for conjured item spells - this will allow easily creating new spells that summons temporary variants of modded (and vanilla) items
+- Automated Artefact item wiki page generator
 
 **Other Plans**
 - Create a test spell pack project to allow people easily get started with spell pack (and mod) development
