@@ -1,6 +1,7 @@
 package com.windanesz.wizardryutils.tools;
 
 import com.windanesz.wizardryutils.item.ItemNewArtefact;
+import electroblob.wizardry.Wizardry;
 import electroblob.wizardry.item.ItemArtefact;
 import electroblob.wizardry.spell.Spell;
 import electroblob.wizardry.util.SpellProperties.Context;
@@ -117,8 +118,8 @@ public class GeneratorSnippets {
 						"| " + i++
 								+ " | " + "![](https://github.com/" + githubRepo + "/blob/1.12.2/src/main/resources/assets/" + modid + "/textures/spells/" + spell.getRegistryName().getPath() + ".png)"
 								+ " | " + "[[" + spell.getDisplayName() + "]]"
-								+ " | " + spell.getElement().getDisplayName()
 								+ " | " + spell.getTier().getDisplayName()
+								+ " | " + spell.getElement().getDisplayName()
 								+ " | " + spell.getType().getDisplayName()
 								+ " | " + spell.getCost()
 								+ " | " + (spell.isContinuous ? "Yes" : "No")
@@ -188,7 +189,7 @@ public class GeneratorSnippets {
 								+ " | " + toTitleCase((item instanceof ItemArtefact ? ((ItemArtefact) item).getType().name().toLowerCase() : ((ItemNewArtefact) item).getType().name().toLowerCase()))
 								+ " | " + item.getItemStackDisplayName(new ItemStack(item))
 								+ " | " + item.getRarity(new ItemStack(item)).getName()
-								+ " |"
+								+ " | "  + Wizardry.proxy.translate("item." + item.getRegistryName().toString() + ".desc").replace("\n", "<br />")
 								+ " |\n"
 				);
 			}
