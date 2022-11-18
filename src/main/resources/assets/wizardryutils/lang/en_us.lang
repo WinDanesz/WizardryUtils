@@ -16,9 +16,10 @@ name.wizardryutils:bound_item=Bound Item (Disappears in %s seconds)
 attribute.name.wizardryutils.SpellBlast=% Spell Blast
 attribute.name.wizardryutils.SpellChargeup=% Spell Chargeup
 attribute.name.wizardryutils.SpellCost=% Spell Cost
+attribute.name.wizardryutils.SpellRange=% Spell Range
 attribute.name.wizardryutils.SpellCooldown=% Spell Cooldown
 attribute.name.wizardryutils.SpellDuration=% Spell Duration
-attribute.name.wizardryutils.SpellPotency=%% Spell Potency
+attribute.name.wizardryutils.SpellPotency=% Spell Potency
 
 attribute.name.wizardryutils.SpellSiphon=% Spell Siphon
 attribute.name.wizardryutils.SpellCondensing=Mana Condensing
