@@ -1,6 +1,8 @@
 package com.windanesz.wizardryutils.registry;
 
 import com.windanesz.wizardryutils.WizardryUtils;
+import com.windanesz.wizardryutils.item.ItemDustyArtefact;
+import com.windanesz.wizardryutils.item.ItemDustySpellBook;
 import com.windanesz.wizardryutils.item.ItemNewArtefact;
 import electroblob.wizardry.registry.WizardryTabs;
 import net.minecraft.block.Block;
@@ -23,6 +25,12 @@ public final class ItemRegistry {
 
 	private ItemRegistry() {} // No instances!
 
+	public static final Item dusty_amulet = placeholder();
+	public static final Item dusty_ring = placeholder();
+	public static final Item dusty_charm = placeholder();
+	public static final Item dusty_headgear = placeholder();
+	public static final Item dusty_spell_book = placeholder();
+
 	@SubscribeEvent
 	public static void register(RegistryEvent.Register<Item> event) {
 
@@ -35,6 +43,13 @@ public final class ItemRegistry {
 			ItemRegistry.registerItemArtefact(registry, "belt_test", WizardryUtils.MODID, new ItemNewArtefact(EnumRarity.RARE, ItemNewArtefact.Type.BELT));
 			ItemRegistry.registerItemArtefact(registry, "body_test", WizardryUtils.MODID, new ItemNewArtefact(EnumRarity.EPIC, ItemNewArtefact.Type.BODY));
 		}
+
+		registerItem(registry,  "dusty_amulet", WizardryUtils.MODID, new ItemDustyArtefact("amulet"));
+		registerItem(registry,  "dusty_ring", WizardryUtils.MODID, new ItemDustyArtefact("ring"));
+		registerItem(registry,  "dusty_charm", WizardryUtils.MODID, new ItemDustyArtefact("charm"));
+		registerItem(registry,  "dusty_headgear", WizardryUtils.MODID, new ItemDustyArtefact("head"));
+		registerItem(registry,  "dusty_belt", WizardryUtils.MODID, new ItemDustyArtefact("belt"));
+		registerItem(registry,  "dusty_spell_book", WizardryUtils.MODID, new ItemDustySpellBook());
 	}
 
 	@Nonnull
@@ -54,7 +69,7 @@ public final class ItemRegistry {
 	 * Categorization happens based on EnumRarity (Uncommon/Rare/Epic) - the standard Wizardry artefact rarities.
 	 */
 	public static void registerItemArtefact(IForgeRegistry<Item> registry, String name, String modid, Item item, boolean addToLoot) {
-		registerItem(registry, modid, name, item, false);
+		registerItem(registry, name, modid, item, false);
 		if (addToLoot) {
 			LootRegistry.addArtefact(item);
 		}
@@ -65,7 +80,7 @@ public final class ItemRegistry {
 		registerItem(registry, name, modid, item, false);
 	}
 
-	public static void registerItem(IForgeRegistry<Item> registry, String modid, String name, Item item, boolean setTabIcon) {
+	public static void registerItem(IForgeRegistry<Item> registry, String name, String modid, Item item, boolean setTabIcon) {
 		item.setRegistryName(modid, name);
 		item.setTranslationKey(item.getRegistryName().toString());
 		registry.register(item);

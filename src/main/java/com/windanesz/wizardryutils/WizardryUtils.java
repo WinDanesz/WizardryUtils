@@ -4,6 +4,8 @@ import com.windanesz.wizardryutils.capability.SummonedCreatureData;
 import com.windanesz.wizardryutils.capability.SummonedItemCapability;
 import com.windanesz.wizardryutils.integration.baubles.BaublesIntegration;
 import com.windanesz.wizardryutils.integration.crafttweaker.CrafttweakerIntegration;
+import com.windanesz.wizardryutils.registry.ItemModelRegistry;
+import com.windanesz.wizardryutils.registry.LootRegistry;
 import com.windanesz.wizardryutils.server.Attributes;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -47,6 +49,8 @@ public class WizardryUtils {
 		logger = event.getModLog();
 
 		proxy.registerRenderers();
+		ItemModelRegistry.registerModForAutoItemModelRegistry(MODID);
+		LootRegistry.preInit();
 
 		BaublesIntegration.init();
 		CrafttweakerIntegration.init();
