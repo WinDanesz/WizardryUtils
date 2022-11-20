@@ -2,6 +2,7 @@ package com.windanesz.wizardryutils.registry;
 
 import com.windanesz.wizardryutils.Settings;
 import com.windanesz.wizardryutils.WizardryUtils;
+import com.windanesz.wizardryutils.loot.ArtefactCondition;
 import electroblob.wizardry.Wizardry;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
@@ -13,6 +14,7 @@ import net.minecraft.world.storage.loot.LootEntryTable;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -38,6 +40,10 @@ public class LootRegistry {
 
 	public static void addArtefact(Item artefact) {
 		artefacts.add(artefact);
+	}
+
+	public static void preInit() {
+		LootConditionManager.registerCondition(new ArtefactCondition.Serializer());
 	}
 
 	@SubscribeEvent
