@@ -3,6 +3,7 @@ package com.windanesz.wizardryutils.integration.crafttweaker.api;
 import com.windanesz.wizardryutils.integration.crafttweaker.spell.ZenSpell;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.entity.IEntityLivingBase;
+import crafttweaker.api.event.IEventCancelable;
 import crafttweaker.api.player.IPlayer;
 import crafttweaker.api.world.IFacing;
 import crafttweaker.api.world.IWorld;
@@ -16,7 +17,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenRegister
 @ZenClass("mods.wizardryutils.ISpellCastEvent")
-public interface ISpellCastEvent {
+public interface ISpellCastEvent extends IEventCancelable {
 
 	@ZenGetter("world")
 	IWorld getWorld();

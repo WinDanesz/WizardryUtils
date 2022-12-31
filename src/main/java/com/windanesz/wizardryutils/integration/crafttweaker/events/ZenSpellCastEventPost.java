@@ -76,4 +76,15 @@ public class ZenSpellCastEventPost implements ISpellCastEvent {
 	public double getZ() {
 		return event.getZ();
 	}
+
+	@Override
+	public boolean isCanceled() {
+		return event.isCanceled();
+	}
+
+	@Override
+	public void setCanceled(boolean canceled) {
+		event.setCanceled(canceled);
+	}
+
 }
