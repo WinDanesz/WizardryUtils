@@ -1,6 +1,7 @@
 package com.windanesz.wizardryutils.item;
 
 import electroblob.wizardry.Wizardry;
+import electroblob.wizardry.constants.Tier;
 import electroblob.wizardry.item.ItemSpellBook;
 import electroblob.wizardry.registry.Spells;
 import electroblob.wizardry.registry.WizardryTabs;
@@ -58,7 +59,7 @@ public class ItemDustySpellBook extends Item {
 		if (!world.isRemote) {
 
 			List<Item> bookTypeList = ForgeRegistries.ITEMS.getValuesCollection().stream().filter(i -> i instanceof ItemSpellBook).collect(Collectors.toList());
-			Spell newSpell = getRandomSpell();
+			Spell newSpell = getRandomSpell(world);
 
 			for (int i = 0; i < bookTypeList.size(); i++) {
 				Item currentBook = bookTypeList.get(i);
@@ -71,9 +72,10 @@ public class ItemDustySpellBook extends Item {
 		return super.onItemUseFinish(stack, world, entityLiving);
 	}
 
-	private static Spell getRandomSpell() {
+	private static Spell getRandomSpell(World world) {
+		Tier tier = Tier.getWeightedRandomTier(world.rand, Tier.NOVICE, Tier.APPRENTICE, Tier.ADVANCED, Tier.MASTER);
 		List<Spell> spells = Spell.getSpells(new Spell.TierElementFilter(null, null, SpellProperties.Context.BOOK));
-		spells.removeIf((new Spell.TierElementFilter(null, null, SpellProperties.Context.LOOTING)).negate());
+		spells.removeIf((new Spell.TierElementFilter(tier, null, SpellProperties.Context.LOOTING)).negate());
 
 		if (spells.size() != 0) {
 			return spells.get(itemRand.nextInt(spells.size()));
