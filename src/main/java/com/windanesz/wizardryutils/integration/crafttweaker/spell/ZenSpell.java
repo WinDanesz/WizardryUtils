@@ -30,6 +30,11 @@ public class ZenSpell {
 		return new ZenSpell(Spell.get(name));
 	}
 
+	@ZenMethod
+	public static int getMetaData(String spell) {
+		return Spell.get(spell).metadata();
+	}
+
 	@ZenGetter("elementID")
 	@ZenMethod
 	public int getElementID() {
