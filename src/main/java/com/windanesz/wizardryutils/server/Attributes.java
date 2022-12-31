@@ -40,7 +40,7 @@ public class Attributes {
 	// setShouldWatch allows to share the attribute value and modifiers with the client
 	public static RangedAttribute POTENCY = (RangedAttribute) new RangedAttribute(null, WizardryUtils.MODID + ".SpellPotency", 100, -500, MAX_VALUE).setShouldWatch(true);
 	public static RangedAttribute CHARGEUP = (RangedAttribute) new RangedAttribute(null, WizardryUtils.MODID + ".SpellChargeup", 100, -500, MAX_VALUE).setShouldWatch(true);
-	public static RangedAttribute COST = (RangedAttribute) new RangedAttribute(null, WizardryUtils.MODID + ".SpellCost", 100, 100, MAX_VALUE).setShouldWatch(true);
+	public static RangedAttribute COST = (RangedAttribute) new RangedAttribute(null, WizardryUtils.MODID + ".SpellCost", 100, -500, MAX_VALUE).setShouldWatch(true);
 	public static RangedAttribute DURATION = (RangedAttribute) new RangedAttribute(null, WizardryUtils.MODID + ".SpellDuration", 100, -500, MAX_VALUE).setShouldWatch(true);
 	public static RangedAttribute BLAST = (RangedAttribute) new RangedAttribute(null, WizardryUtils.MODID + ".SpellBlast", 100, -500, MAX_VALUE).setShouldWatch(true);
 	public static RangedAttribute COOLDOWN = (RangedAttribute) new RangedAttribute(null, WizardryUtils.MODID + ".SpellCooldown", 100, -500, MAX_VALUE).setShouldWatch(true);
