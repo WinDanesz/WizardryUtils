@@ -2,6 +2,7 @@ package com.windanesz.wizardryutils.registry;
 
 import com.windanesz.wizardryutils.WizardryUtils;
 import com.windanesz.wizardryutils.item.ItemDustyArtefact;
+import com.windanesz.wizardryutils.item.ItemDustyCasket;
 import com.windanesz.wizardryutils.item.ItemDustySpellBook;
 import com.windanesz.wizardryutils.item.ItemNewArtefact;
 import electroblob.wizardry.registry.WizardryTabs;
@@ -30,6 +31,7 @@ public final class ItemRegistry {
 	public static final Item dusty_charm = placeholder();
 	public static final Item dusty_headgear = placeholder();
 	public static final Item dusty_spell_book = placeholder();
+	public static final Item dusty_casket = placeholder();
 
 	@SubscribeEvent
 	public static void register(RegistryEvent.Register<Item> event) {
@@ -50,6 +52,7 @@ public final class ItemRegistry {
 		registerItem(registry,  "dusty_headgear", WizardryUtils.MODID, new ItemDustyArtefact("head"));
 		registerItem(registry,  "dusty_belt", WizardryUtils.MODID, new ItemDustyArtefact("belt"));
 		registerItem(registry,  "dusty_spell_book", WizardryUtils.MODID, new ItemDustySpellBook());
+		registerItem(registry,  "dusty_casket", WizardryUtils.MODID, new ItemDustyCasket());
 	}
 
 	@Nonnull

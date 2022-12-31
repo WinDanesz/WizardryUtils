@@ -18,6 +18,8 @@ item.wizardryutils:dusty_headgear.name=Dusty Headgear
 item.wizardryutils:dusty_headgear.desc=A dusty circlet. Right-click to clean it
 item.wizardryutils:dusty_belt.name=Dusty Belt
 item.wizardryutils:dusty_belt.desc=A dusty belt. Right-click to clean it
+item.wizardryutils:dusty_casket.name=Dusty Casket
+item.wizardryutils:dusty_casket.desc=A dusty casket, containing an artefact. Right-click to open it
 item.wizardryutils:dusty_spell_book.name=Dusty Spell Book
 item.wizardryutils:dusty_spell_book.desc=A dusty spell book. Right-click to clean it
 
