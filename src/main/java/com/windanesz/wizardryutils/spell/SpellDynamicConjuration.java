@@ -27,6 +27,7 @@ public class SpellDynamicConjuration extends Spell {
 		super(modID, name, SpellActions.IMBUE, false);
 		this.item = item;
 		addProperties(ITEM_LIFETIME);
+		SummonedItemCapability.ITEMS_TO_APPLY_TO.add(item);
 	}
 	
 	@Override
@@ -105,5 +106,9 @@ public class SpellDynamicConjuration extends Spell {
 		stack.setTagCompound(nbt);
 
 		return stack;
+	}
+
+	public Item getItem() {
+		return item;
 	}
 }

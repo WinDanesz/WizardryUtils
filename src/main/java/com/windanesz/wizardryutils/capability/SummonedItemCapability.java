@@ -3,6 +3,7 @@ package com.windanesz.wizardryutils.capability;
 import com.windanesz.wizardryutils.WizardryUtils;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,6 +24,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import java.util.HashSet;
+
 /**
  * Summoned item capability, these items disappear over time and cannot leave the inventory
  *
@@ -32,6 +35,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 @Mod.EventBusSubscriber
 public class SummonedItemCapability extends SummonedThing implements INBTSerializable<NBTTagCompound> {
 
+	public static HashSet<Item> ITEMS_TO_APPLY_TO = new HashSet<Item>();
 	/**
 	 * Static instance of what I like to refer to as the capability key. Private because, well, it's internal!
 	 * This annotation does some crazy Forge magic behind the scenes and assigns this field a value.
@@ -97,7 +101,7 @@ public class SummonedItemCapability extends SummonedThing implements INBTSeriali
 
 	@SubscribeEvent
 	public static void attachCapability(AttachCapabilitiesEvent<ItemStack> event) {
-		if (event.getObject() != null) {
+		if (event.getObject() != null && ITEMS_TO_APPLY_TO.contains(event.getObject().getItem())) {
 			event.addCapability(new ResourceLocation(WizardryUtils.MODID, "SummonedItemData"),
 					new Provider((ItemStack) event.getObject()));
 		}
