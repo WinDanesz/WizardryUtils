@@ -2,6 +2,7 @@ package com.windanesz.wizardryutils.handler;
 
 import com.windanesz.wizardryutils.integration.baubles.BaublesIntegration;
 import com.windanesz.wizardryutils.server.Attributes;
+import com.windanesz.wizardryutils.server.RangedAttributeElemental;
 import electroblob.wizardry.event.SpellCastEvent;
 import electroblob.wizardry.item.IManaStoringItem;
 import electroblob.wizardry.item.ISpellCastingItem;
@@ -109,11 +110,17 @@ public class WizardryUtilsEventHandler {
 
 				IAttributeInstance attributeInstance = caster.getEntityAttribute(entry.getKey());
 				//noinspection ConstantConditions
+
 				if (attributeInstance != null) {
-					String modifier = entry.getValue();
-					float oldValue = event.getModifiers().get(modifier);
-					float newValue = (float) (oldValue * (0.01 * attributeInstance.getAttributeValue()));
-					event.getModifiers().set(modifier, newValue, true);
+					if (!(attributeInstance.getAttribute() instanceof RangedAttributeElemental) ||
+							(attributeInstance.getAttribute() instanceof RangedAttributeElemental && event.getSpell().getElement()
+									== ((RangedAttributeElemental) attributeInstance.getAttribute()).element)) {
+
+						String modifier = entry.getValue();
+						float oldValue = event.getModifiers().get(modifier);
+						float newValue = (float) (oldValue * (0.01 * attributeInstance.getAttributeValue()));
+						event.getModifiers().set(modifier, newValue, true);
+					}
 				}
 			}
 		}
