@@ -1,9 +1,13 @@
-<h2>Version v1.1.1 - 10/30/2022</h2>
+<h2>Version v1.2.0 - 1/27/2024</h2>
 <p>&nbsp;</p>
 <h3>What's Changed</h3>
 <p><span style="font-size: 1.2rem;">&nbsp;</span></p>
+<h4><strong>Bug Fixes</strong></h4>
+<p>- Fixed attribute lang keys</p>
+<p>- WizardryUtils from now will only attach its dynamic/summoned item capability to items that are actually used by dynamic conjuration spells. This should fix many incompatibility/broken recipe issues.</p>
+
 <h4><strong>Features</strong></h4>
-<p>- Some more helper methods</p>
+<p>- Implemented potency, cost, duration, blast, range and cooldown attribute modifiers for each element. These can be applied to any handheld/armor/bauble items. They are named as attribute.name.wizardryutils.<element name><modifier> (e.g.: attribute.name.wizardryutils.SorcerySpellRange)</p>
 <p>&nbsp;</p>
 <p>As always, the easiest way to get help or feedback is through the Discord server! Find the link on the CurseForge page.</p>
 <p>&nbsp;</p>

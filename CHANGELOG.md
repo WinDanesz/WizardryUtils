@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.2.0] - 2024-01-27
+### :sparkles: New Features
+- [`26ec728`](https://github.com/WinDanesz/WizardryUtils/commit/26ec7287e6ddb352b18d7b1af139673fd4347834) - Implemented potency, cost, duration, blast, range and cooldown attribute modifiers for each element. These can be applied to any handheld/armor/bauble items. They are named as attribute.name.wizardryutils.<element name><modifier> (e.g.: attribute.name.wizardryutils.SorcerySpellRange) *(commit by [@WinDanesz](https://github.com/WinDanesz))*
+
+### :bug: Bug Fixes
+- [`d41bba6`](https://github.com/WinDanesz/WizardryUtils/commit/d41bba6731f89616ea2ef60cfe9f58428475e914) - Fixed attribute lang keys *(commit by [@WinDanesz](https://github.com/WinDanesz))*
+- [`e4604f2`](https://github.com/WinDanesz/WizardryUtils/commit/e4604f2adc12ae7cd74dfeda9516327314a8cc21) - WizardryUtils from now will only attach its dynamic/summoned item capability to items that are actually used by dynamic conjuration spells. This should fix many incompatibility/broken recipe issues. *(commit by [@WinDanesz](https://github.com/WinDanesz))*
+
+
 ## [v1.1.1] - 2022-10-30
 ### :sparkles: New Features
 - [`96943fb`](https://github.com/WinDanesz/WizardryUtils/commit/96943fb62242e30e7c9d0c3aaa0bdd1fa3cf53bc) - Some more helper methods *(commit by [@WinDanesz](https://github.com/WinDanesz))*
@@ -71,3 +80,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v1.0.1]: https://github.com/WinDanesz/WizardryUtils/compare/v1.0.0...v1.0.1
 [v1.1.0]: https://github.com/WinDanesz/WizardryUtils/compare/v1.0.1...v1.1.0
 [v1.1.1]: https://github.com/WinDanesz/WizardryUtils/compare/v1.1.0...v1.1.1
+[v1.2.0]: https://github.com/WinDanesz/WizardryUtils/compare/v1.1.4...v1.2.0
