@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.2.1] - 2024-03-05
+### :bug: Bug Fixes
+- [`521e37a`](https://github.com/WinDanesz/WizardryUtils/commit/521e37a68600b0c8b722c043ea5f6baac8e5dbbb) - Fix body baubles short mapping. Fixes [#26](https://github.com/WinDanesz/WizardryUtils/pull/26) *(commit by [@WinDanesz](https://github.com/WinDanesz))*
+
+
 ## [v1.2.0] - 2024-01-27
 ### :sparkles: New Features
 - [`26ec728`](https://github.com/WinDanesz/WizardryUtils/commit/26ec7287e6ddb352b18d7b1af139673fd4347834) - Implemented potency, cost, duration, blast, range and cooldown attribute modifiers for each element. These can be applied to any handheld/armor/bauble items. They are named as attribute.name.wizardryutils.<element name><modifier> (e.g.: attribute.name.wizardryutils.SorcerySpellRange) *(commit by [@WinDanesz](https://github.com/WinDanesz))*
@@ -81,3 +86,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v1.1.0]: https://github.com/WinDanesz/WizardryUtils/compare/v1.0.1...v1.1.0
 [v1.1.1]: https://github.com/WinDanesz/WizardryUtils/compare/v1.1.0...v1.1.1
 [v1.2.0]: https://github.com/WinDanesz/WizardryUtils/compare/v1.1.4...v1.2.0
+[v1.2.1]: https://github.com/WinDanesz/WizardryUtils/compare/v1.2.0...v1.2.1
