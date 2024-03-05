@@ -52,7 +52,7 @@ public final class BaublesIntegration {
 
 		OTHER_ARTEFACT_TYPE_MAP.put(ItemNewArtefact.Type.BELT, BaubleType.BELT);
 		OTHER_ARTEFACT_TYPE_MAP.put(ItemNewArtefact.Type.HEAD, BaubleType.HEAD);
-		OTHER_ARTEFACT_TYPE_MAP.put(ItemNewArtefact.Type.BODY, BaubleType.HEAD);
+		OTHER_ARTEFACT_TYPE_MAP.put(ItemNewArtefact.Type.BODY, BaubleType.BODY);
 	}
 
 	public static boolean enabled() {
