@@ -41,6 +41,8 @@ public class EntityAIMinionOwnerHurtTarget extends EntityAITarget {
 		if (this.owner == null) {
 			if (!SummonedCreatureData.isSummonedEntity(this.minion)) {
 				return false;
+			} else if (this.minion instanceof ISummonedCreature) {
+				this.owner = (EntityLivingBase) ((ISummonedCreature) this.minion).getOwner();
 			} else {
 				SummonedCreatureData data = SummonedCreatureData.get(this.minion);
 				this.owner = data.getCaster();
