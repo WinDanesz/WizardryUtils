@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.2.2] - 2024-03-16
+### :bug: Bug Fixes
+- [`0bd32ff`](https://github.com/WinDanesz/WizardryUtils/commit/0bd32ff2990e54c17203b4b680b0095d546478e4) - EntityAIMinionOwnerHurtTarget and EntityAIMinionOwnerHurtByTarget works with ISummonedCreature mobs *(commit by [@WinDanesz](https://github.com/WinDanesz))*
+
+
 ## [v1.2.1] - 2024-03-05
 ### :bug: Bug Fixes
 - [`521e37a`](https://github.com/WinDanesz/WizardryUtils/commit/521e37a68600b0c8b722c043ea5f6baac8e5dbbb) - Fix body baubles short mapping. Fixes [#26](https://github.com/WinDanesz/WizardryUtils/pull/26) *(commit by [@WinDanesz](https://github.com/WinDanesz))*
@@ -87,3 +92,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v1.1.1]: https://github.com/WinDanesz/WizardryUtils/compare/v1.1.0...v1.1.1
 [v1.2.0]: https://github.com/WinDanesz/WizardryUtils/compare/v1.1.4...v1.2.0
 [v1.2.1]: https://github.com/WinDanesz/WizardryUtils/compare/v1.2.0...v1.2.1
+[v1.2.2]: https://github.com/WinDanesz/WizardryUtils/compare/v1.2.1...v1.2.2

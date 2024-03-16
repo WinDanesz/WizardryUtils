@@ -1,9 +1,9 @@
-<h2>Version v1.2.1 - 3/5/2024</h2>
+<h2>Version v1.2.2 - 3/16/2024</h2>
 <p>&nbsp;</p>
 <h3>What's Changed</h3>
 <p><span style="font-size: 1.2rem;">&nbsp;</span></p>
 <h4><strong>Bug Fixes</strong></h4>
-<p>- Fix body baubles short mapping. Fixes #26</p>
+<p>- EntityAIMinionOwnerHurtTarget and EntityAIMinionOwnerHurtByTarget works with ISummonedCreature mobs</p>
 <p>&nbsp;</p>
 <p>As always, the easiest way to get help or feedback is through the Discord server! Find the link on the CurseForge page.</p>
 <p>&nbsp;</p>
