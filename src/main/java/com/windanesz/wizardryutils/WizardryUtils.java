@@ -20,8 +20,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Random;
 
-@Mod(modid = WizardryUtils.MODID, name = WizardryUtils.NAME, version = "@VERSION@", acceptedMinecraftVersions = "[@MCVERSION@]",
-		dependencies = "required-after:ebwizardry@[@WIZARDRY_VERSION@,4.4)")
+@Mod(modid = WizardryUtils.MODID, name = WizardryUtils.NAME, version = "1.3.0", acceptedMinecraftVersions = "1.12.2",
+		dependencies = "required-after:ebwizardry@[4.3.15,4.4)")
 public class WizardryUtils {
 
 	public static final String MODID = "wizardryutils";

@@ -1,0 +1,14 @@
+
+{
+  "required": true,
+  "minVersion": "0.7",
+  "package": "com.windanesz.wizardryutils.mixin",
+  "refmap": "mixins.wizardryutils.refmap.json",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "ContainerArcaneWorkbenchMixin",
+    "ArcaneWorkbenchRecipeCategoryMixin",
+    "ImbuementAltarRecipeCategoryMixin",
+    "TileEntityArcaneWorkbenchMixin"
+  ]
+}
