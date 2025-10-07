@@ -1,7 +1,7 @@
 package com.windanesz.wizardryutils.integration.crafttweaker;
 
 import com.windanesz.wizardryutils.Settings;
-import com.windanesz.wizardryutils.integration.crafttweaker.imbuement_altar.ImbuementAltarCrafttweakerEventHandler;
+//import com.windanesz.wizardryutils.integration.crafttweaker.imbuement_altar.ImbuementAltarCrafttweakerEventHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 
@@ -20,7 +20,7 @@ public class CrafttweakerIntegration {
 
 	public static void registerEvents() {
 		MinecraftForge.EVENT_BUS.register(new CrTCommonEventHandler());
-		MinecraftForge.EVENT_BUS.register(new ImbuementAltarCrafttweakerEventHandler());
+		//MinecraftForge.EVENT_BUS.register(new ImbuementAltarCrafttweakerEventHandler());
 	}
 
 	public static boolean enabled() {
