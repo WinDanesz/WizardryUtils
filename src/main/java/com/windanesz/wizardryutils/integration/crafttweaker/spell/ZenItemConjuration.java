@@ -18,21 +18,37 @@ public class ZenItemConjuration {
 
     public static final class ConjurationSpellEntry {
         public final String name;
-        public final String itemName;
+        public final String itemRegistryName;
 
-        public ConjurationSpellEntry(String name, String itemName) {
+        public ConjurationSpellEntry(String name, String itemRegistryName) {
             this.name = name;
-            this.itemName = itemName;
+            this.itemRegistryName = itemRegistryName;
         }
     }
 
     public static final List<ConjurationSpellEntry> entries = new ArrayList<>();
 
+    /**
+     * Creates a new conjuration spell that summons the specified item.
+     * <p>
+     * Takes a registry name for the item. The item is looked up from the Forge registry at spell cast time,
+     * not during registration, to avoid early registration timing issues.
+     * <p>
+     * Example usage in CraftTweaker:
+     * <pre>
+     * // For vanilla items
+     * mods.wizardryutils.ConjurationSpells.create("iron_sword_spell", "minecraft:iron_sword");
+     * 
+     * // For modded items
+     * mods.wizardryutils.ConjurationSpells.create("custom_item_spell", "modid:custom_item");
+     * </pre>
+     * 
+     * @param name The name of the spell (will be prefixed with the mod ID)
+     * @param itemRegistryName The registry name of the item to conjure (e.g., "minecraft:diamond_sword")
+     */
     @ZenMethod
-    // ContentTweaker calls this too early, even before Wizardry's spells are instantiated.
-    // Stashing entries avoids network ID shifts from parent constructors.
-    public static void create(String name, String itemName) {
-        entries.add(new ConjurationSpellEntry(name, itemName));
+    public static void create(String name, String itemRegistryName) {
+        entries.add(new ConjurationSpellEntry(name, itemRegistryName));
     }
 
     public static Spell instantiate(ConjurationSpellEntry entry) {
@@ -41,17 +57,19 @@ public class ZenItemConjuration {
         }
 
         String name = entry.name;
-        String itemName = entry.itemName;
-
-        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName));
-        if (item == null) {
-            throw new RuntimeException("Could not find item " + itemName + "!");
-        }
+        String itemRegistryName = entry.itemRegistryName;
 
         SpellDynamicConjuration spell = new SpellDynamicConjuration(
                 "contenttweaker",
                 name,
-                item
+                () -> {
+                    // Look up the item from the registry at cast time
+                    Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemRegistryName));
+                    if (item == null) {
+                        throw new RuntimeException("Could not find item " + itemRegistryName + " in registry!");
+                    }
+                    return item;
+                }
         );
 
         return spell;

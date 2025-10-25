@@ -16,18 +16,40 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
+import java.util.function.Supplier;
+
 public class SpellDynamicConjuration extends Spell {
 
 	public static final String ITEM_LIFETIME = "item_lifetime";
 
 	/** The item that is conjured by this spell. Should implement {@link IConjuredItem}. */
 	protected final Item item;
+	
+	/** A supplier that provides the item to conjure. Used when the item needs to be looked up at runtime. */
+	protected final Supplier<Item> itemSupplier;
 
 	public SpellDynamicConjuration(String modID, String name, Item item){
 		super(modID, name, SpellActions.IMBUE, false);
 		this.item = item;
+		this.itemSupplier = null;
 		addProperties(ITEM_LIFETIME);
 		SummonedItemCapability.ITEMS_TO_APPLY_TO.add(item);
+	}
+	
+	/**
+	 * Constructor that accepts a supplier for the item, allowing deferred lookup.
+	 * This is useful when the item registry might not be ready at spell registration time.
+	 * 
+	 * @param modID The mod ID
+	 * @param name The spell name
+	 * @param itemSupplier A supplier that provides the item to conjure
+	 */
+	public SpellDynamicConjuration(String modID, String name, Supplier<Item> itemSupplier){
+		super(modID, name, SpellActions.IMBUE, false);
+		this.item = null;
+		this.itemSupplier = itemSupplier;
+		addProperties(ITEM_LIFETIME);
+		// Note: We cannot add the item to ITEMS_TO_APPLY_TO here since it's not available yet
 	}
 	
 	@Override
@@ -60,7 +82,14 @@ public class SpellDynamicConjuration extends Spell {
 	 * player already had the item. Override to add special conjuring behaviour. */
 	protected boolean conjureItem(EntityPlayer caster, SpellModifiers modifiers){
 
-		ItemStack stack = new ItemStack(item);
+		// Get the item from supplier if available, otherwise use the direct field
+		Item itemToConjure = itemSupplier != null ? itemSupplier.get() : item;
+		
+		if (itemToConjure == null) {
+			throw new RuntimeException("Could not get item for conjuration spell!");
+		}
+
+		ItemStack stack = new ItemStack(itemToConjure);
 
 		//IConjuredItem.setDurationMultiplier(stack, modifiers.get(WizardryItems.duration_upgrade));
 		//IConjuredItem.setDamageMultiplier(stack, modifiers.get(SpellModifiers.POTENCY));
@@ -109,6 +138,6 @@ public class SpellDynamicConjuration extends Spell {
 	}
 
 	public Item getItem() {
-		return item;
+		return itemSupplier != null ? itemSupplier.get() : item;
 	}
 }
