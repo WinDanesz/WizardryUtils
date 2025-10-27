@@ -1,5 +1,6 @@
 package com.windanesz.wizardryutils.registry;
 
+import com.windanesz.wizardryutils.entity.EntityDynamicConstruct;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
@@ -45,6 +46,9 @@ public class EntityRegistry {
 	public static void register(RegistryEvent.Register<EntityEntry> event) {
 
 		IForgeRegistry<EntityEntry> registry = event.getRegistry();
+
+		// Register the dynamic construct entity for area effect spells
+		registry.register(EntityRegistry.createEntry(EntityDynamicConstruct.class, "dynamic_construct", "wizardryutils", TrackingType.CONSTRUCT).build());
 
 		// Example
 		// registry.register(SBEntities.createEntry(EntityZombie.class, "a", "penghoul_minion", TrackingType.LIVING).build());
