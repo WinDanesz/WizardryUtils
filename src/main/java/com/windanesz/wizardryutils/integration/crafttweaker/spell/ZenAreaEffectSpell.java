@@ -59,11 +59,23 @@ public class ZenAreaEffectSpell {
 		
 		for (int i = 0; i < entry.potions.length; i++) {
 			final String potionName = entry.potions[i];
-			Potion potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(potionName));
-			if (potion == null) {
-				throw new RuntimeException("Could not find potion effect " + potionName + "!");
-			}
-			potionSuppliers[i] = () -> potion;
+			// Defer potion lookup until the supplier is actually called (at spell cast time)
+			// This allows third-party mods to register their potions before they're needed
+			// Uses a memoizing supplier to cache the result after the first lookup
+			potionSuppliers[i] = new Supplier<Potion>() {
+				private Potion cached = null;
+				
+				@Override
+				public Potion get() {
+					if (cached == null) {
+						cached = ForgeRegistries.POTIONS.getValue(new ResourceLocation(potionName));
+						if (cached == null) {
+							throw new RuntimeException("Could not find potion effect " + potionName + "!");
+						}
+					}
+					return cached;
+				}
+			};
 		}
 
 		SpellDynamicAreaEffect spell = new SpellDynamicAreaEffect(

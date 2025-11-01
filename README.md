@@ -24,3 +24,9 @@ WizardryUtils contains shared functionality and code for my addons for Electrobl
 
 **Other Plans**
 - Create a test spell pack project to allow people easily get started with spell pack (and mod) development
+
+## Documentation
+
+For detailed guides on using CraftTweaker integration, see the [docs](docs) folder:
+- [CraftTweaker Guides](docs/README.md)
+

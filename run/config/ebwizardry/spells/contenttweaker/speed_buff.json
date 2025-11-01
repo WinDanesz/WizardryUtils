@@ -17,7 +17,7 @@
   "chargeup": 0,
   "cooldown": 50,
   "base_properties": {
-    "speed_duration": 200,
-    "speed_strength": 0
+    "empowerment_duration": 200,
+    "empowerment_strength": 0
   }
 }
