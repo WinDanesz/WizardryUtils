@@ -1,0 +1,83 @@
+# Generic
+settings.wizardryutils:general_settings=Общие настройки
+
+# Test items
+item.wizardryutils:head_test.name=Тестовый артефакт для слота головы
+item.wizardryutils:body_test.name=Тестовый артефакт для слота тела
+item.wizardryutils:belt_test.name=Тестовый артефакт для слота пояса
+item.wizardryutils:head_test.desc=Предмет только для разработки. Не встречается в игре.
+item.wizardryutils:body_test.desc=Предмет только для разработки. Не встречается в игре.
+item.wizardryutils:belt_test.desc=Предмет только для разработки. Не встречается в игре.
+item.wizardryutils:dusty_amulet.name=Запыленный амулет
+item.wizardryutils:dusty_amulet.desc=Запыленный амулет. Удерживание и нажатие ПКМ — очистить.
+item.wizardryutils:dusty_ring.name=Запыленное кольцо
+item.wizardryutils:dusty_ring.desc=Запыленное кольцо. Удерживание и нажатие ПКМ — очистить.
+item.wizardryutils:dusty_charm.name=Запыленный талисман
+item.wizardryutils:dusty_charm.desc=Талисман, покрытый пылью. Удерживание и нажатие ПКМ — очистить.
+item.wizardryutils:dusty_headgear.name=Запыленный головной убор
+item.wizardryutils:dusty_headgear.desc=Запыленное ожерелье. Удерживание и нажатие ПКМ — очистить.
+item.wizardryutils:dusty_belt.name=Запыленный пояс
+item.wizardryutils:dusty_belt.desc=Запыленный пояс. Удерживание и нажатие ПКМ — очистить.
+item.wizardryutils:dusty_casket.name=Запыленный ларец
+item.wizardryutils:dusty_casket.desc=Запыленный ларец, содержащий артефакт. Удерживание и нажатие ПКМ — открыть.
+item.wizardryutils:dusty_spell_book.name=Запыленная колдовская книга
+item.wizardryutils:dusty_spell_book.desc=Запыленная колдовская книга. Удерживание и нажатие ПКМ — очистить.
+
+message.wizardryutils:cant_open_gui_with_bound_item=При удерживании связанного предмета использовать его не получится.
+message.wizardryutils:must_summon_with_empty_hand=Связанные предметы могут призываться только пустой рукой.
+name.wizardryutils:bound_item=Связанный предмет. (Исчезает через %s секунд).
+
+attribute.name.wizardryutils.SpellBlast=Взрыв заклинанием
+attribute.name.wizardryutils.SpellChargeup=Зарядка заклинания
+attribute.name.wizardryutils.SpellCost=Затраты заклинанием
+attribute.name.wizardryutils.SpellRange=Досягаемость заклинания
+attribute.name.wizardryutils.SpellCooldown=Перезарядка заклинания
+attribute.name.wizardryutils.SpellDuration=Продолжительность заклинания
+attribute.name.wizardryutils.SpellPotency=Сила заклинания
+
+attribute.name.wizardryutils.SpellSiphon=Выкачивание заклинания
+attribute.name.wizardryutils.SpellCondensing=Конденсирование маны
+
+
+attribute.name.wizardryutils.FireSpellPotency=Сила огненного заклинания
+attribute.name.wizardryutils.FireSpellCost=Затраты огненного заклинания
+attribute.name.wizardryutils.FireSpellDuration=Продолжительность огненного заклинания
+attribute.name.wizardryutils.FireSpellBlast=Взрыв огненного заклинания
+attribute.name.wizardryutils.FireSpellRange=Досягаемость огненного заклинания
+attribute.name.wizardryutils.FireSpellCooldown=Перезарядка огненного заклинания
+attribute.name.wizardryutils.IceSpellPotency=Сила ледяного заклинания
+attribute.name.wizardryutils.IceSpellCost=Затраты ледяного заклинания
+attribute.name.wizardryutils.IceSpellDuration=Продолжительность ледяного заклинания
+attribute.name.wizardryutils.IceSpellBlast=Взрыв ледяного заклинания
+attribute.name.wizardryutils.IceSpellRange=Досягаемость ледяного заклинания
+attribute.name.wizardryutils.IceSpellCooldown=Перезарядка ледяного заклинания
+attribute.name.wizardryutils.LightningSpellPotency=Сила грозового заклинания
+attribute.name.wizardryutils.LightningSpellCost=Затраты грозового заклинания
+attribute.name.wizardryutils.LightningSpellDuration=Продолжительность грозового заклинания
+attribute.name.wizardryutils.LightningSpellBlast=Взрыв грозового заклинания
+attribute.name.wizardryutils.LightningSpellRange=Досягаемость грозового заклинания
+attribute.name.wizardryutils.LightningSpellCooldown=Перезарядка грозового заклинания
+attribute.name.wizardryutils.NecromancySpellPotency=Сила заклинания некромантии
+attribute.name.wizardryutils.NecromancySpellCost=Затраты заклинания некромантии
+attribute.name.wizardryutils.NecromancySpellDuration=Продолжительность заклинания некромантии
+attribute.name.wizardryutils.NecromancySpellBlast=Взрыв заклинания некромантии
+attribute.name.wizardryutils.NecromancySpellRange=Досягаемость заклинания некромантии
+attribute.name.wizardryutils.NecromancySpellCooldown=Перезарядка заклинания некромантии
+attribute.name.wizardryutils.EarthSpellPotency=Сила заклинания земли
+attribute.name.wizardryutils.EarthSpellCost=Затраты заклинания земли
+attribute.name.wizardryutils.EarthSpellDuration=Продолжительность заклинания земли
+attribute.name.wizardryutils.EarthSpellBlast=Взрыв заклинания земли
+attribute.name.wizardryutils.EarthSpellRange=Досягаемость заклинания земли
+attribute.name.wizardryutils.EarthSpellCooldown=Перезарядка заклинания земли
+attribute.name.wizardryutils.SorcerySpellPotency=Сила колдовского заклинания
+attribute.name.wizardryutils.SorcerySpellCost=Затраты колдовского заклинания
+attribute.name.wizardryutils.SorcerySpellDuration=Продолжительность колдовского заклинания
+attribute.name.wizardryutils.SorcerySpellBlast=Взрыв колдовского заклинания
+attribute.name.wizardryutils.SorcerySpellRange=Досягаемость колдовского заклинания
+attribute.name.wizardryutils.SorcerySpellCooldown=Перезарядка колдовского заклинания
+attribute.name.wizardryutils.HealingSpellPotency=Сила исцеляющего заклинания
+attribute.name.wizardryutils.HealingSpellCost=Затраты исцеляющего заклинания
+attribute.name.wizardryutils.HealingSpellDuration=Продолжительность исцеляющего заклинания
+attribute.name.wizardryutils.HealingSpellBlast=Взрыв исцеляющего заклинания
+attribute.name.wizardryutils.HealingSpellRange=Досягаемость исцеляющего заклинания
+attribute.name.wizardryutils.HealingSpellCooldown=Перезарядка исцеляющего заклинания
