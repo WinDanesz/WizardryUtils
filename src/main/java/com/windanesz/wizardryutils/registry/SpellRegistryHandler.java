@@ -6,6 +6,7 @@ import com.windanesz.wizardryutils.integration.crafttweaker.spell.ZenBuffSpell;
 import com.windanesz.wizardryutils.integration.crafttweaker.spell.ZenSpellProjectile;
 import com.windanesz.wizardryutils.integration.crafttweaker.spell.ZenItemConjuration;
 import com.windanesz.wizardryutils.integration.crafttweaker.spell.ZenAreaEffectSpell;
+import com.windanesz.wizardryutils.integration.crafttweaker.spell.ZenCommandSpell;
 import electroblob.wizardry.spell.Spell;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -51,6 +52,13 @@ public class SpellRegistryHandler {
         List<ZenItemConjuration.ConjurationSpellEntry> conjurationSpellEntries = new ArrayList<>(ZenItemConjuration.entries);
         for (ZenItemConjuration.ConjurationSpellEntry entry : conjurationSpellEntries) {
             Spell spell = ZenItemConjuration.instantiate(entry);
+            event.getRegistry().register(spell);
+        }
+
+        // Create a new ArrayList to avoid ConcurrentModificationException
+        List<ZenCommandSpell.CommandSpellEntry> commandSpellEntries = new ArrayList<>(ZenCommandSpell.entries);
+        for (ZenCommandSpell.CommandSpellEntry entry : commandSpellEntries) {
+            Spell spell = ZenCommandSpell.instantiate(entry);
             event.getRegistry().register(spell);
         }
     }

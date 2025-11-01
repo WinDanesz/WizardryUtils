@@ -269,6 +269,9 @@ public class SummonedCreatureData extends SummonedThing {
 	/**
 	 * Every time this entity enters this world (new entity or loaded from disk), this method checks if the entity is a summon.
 	 * If the entity is a summon, the summon's target tasks are immediately replaced by {@link SummonedCreatureData#updateEntityTargetTasks(net.minecraft.entity.EntityCreature)}
+	 * <p>
+	 * Additionally, if the entity's owner is itself a summoned creature, this entity will inherit the grandparent owner.
+	 * This allows minions to summon other entities that still belong to the original player/caster.
 	 *
 	 * @param event
 	 */
@@ -278,6 +281,23 @@ public class SummonedCreatureData extends SummonedThing {
 			EntityLiving entity = (EntityLiving) event.getEntity();
 
 			SummonedCreatureData data = get(entity);
+			
+			// Inherit grandparent ownership if the immediate owner is also a summoned creature
+			EntityLivingBase owner = data.getCaster();
+			if (isSummonedEntity(owner)) {
+				SummonedCreatureData parentData = get(owner);
+				EntityLivingBase grandparent = parentData.getCaster();
+				
+				if (grandparent != null) {
+					// Inherit the grandparent as the true owner
+					data.setCaster(grandparent);
+					// Inherit lifetime settings from parent if this entity has default lifetime
+					if (data.getLifetime() == 0 && parentData.getLifetime() > 0) {
+						data.setLifetime(parentData.getLifetime());
+					}
+				}
+			}
+			
 			data.updateEntityTargetTasks((EntityCreature) entity);
 		}
 	}
