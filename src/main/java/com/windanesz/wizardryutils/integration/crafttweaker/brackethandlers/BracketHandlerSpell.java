@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @BracketHandler
 @ZenRegister
+@SuppressWarnings("unused")
 public class BracketHandlerSpell implements IBracketHandler {
 
 	private static final IJavaMethod method = JavaMethod.get(GlobalRegistry.getTypes(), BracketHandlerSpell.class, "getSpell", String.class);
